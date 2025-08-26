@@ -1,0 +1,144 @@
+// Chatbot component global styles
+// This file contains any global styles needed for the chatbot component that should be loaded with other Spartacus styles
+
+// Import Font Awesome icons if not already included
+// These styles ensure chatbot icons are available globally
+.fas.fa-comments,
+.fas.fa-times,
+.fas.fa-robot,
+.fas.fa-user,
+.fas.fa-paper-plane,
+.fas.fa-trash-alt {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+}
+
+// Global chatbot z-index management to ensure it appears above all Spartacus components
+app-chatbot {
+  z-index: 1050 !important; // Above Spartacus modals and overlays
+}
+
+// Ensure chatbot doesn't interfere with Spartacus responsive breakpoints
+@media (max-width: 767.98px) {
+  app-chatbot {
+    // Mobile-specific adjustments if needed
+  }
+}
+
+// Integration with Spartacus theming
+:root {
+  // Chatbot can inherit Spartacus CSS custom properties
+  --chatbot-primary-color: var(--cx-color-primary, #0066cc);
+  --chatbot-secondary-color: var(--cx-color-secondary, #004499);
+  --chatbot-text-color: var(--cx-color-text, #333333);
+  --chatbot-background-color: var(--cx-color-background, #ffffff);
+  --chatbot-border-color: var(--cx-color-medium, #e0e0e0);
+}
+
+// Enhanced markdown content styling for better readability
+.markdown-content {
+  font-family: inherit;
+  line-height: 1.5;
+  color: inherit;
+
+  // Enhanced typography
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0.8em 0 0.4em 0;
+    color: var(--chatbot-primary-color);
+    font-weight: 600;
+  }
+
+  h1 { font-size: 1.2em; }
+  h2 { font-size: 1.1em; }
+  h3, h4, h5, h6 { font-size: 1em; }
+
+  // Lists
+  ul, ol {
+    margin: 0.5em 0;
+    padding-left: 1.2em;
+  }
+
+  li {
+    margin: 0.2em 0;
+  }
+
+  // Code blocks and inline code
+  code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+  }
+
+  pre {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.8em;
+    border-radius: 5px;
+    overflow-x: auto;
+    border-left: 3px solid var(--chatbot-primary-color);
+    margin: 0.8em 0;
+
+    code {
+      background: none;
+      padding: 0;
+    }
+  }
+
+  // Emphasis and strong text
+  strong {
+    font-weight: 600;
+    color: var(--chatbot-primary-color);
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  // Tool result formatting
+  p:has(> strong) {
+    margin: 0.6em 0;
+  }
+
+  // Blockquotes
+  blockquote {
+    border-left: 3px solid var(--chatbot-border-color);
+    padding-left: 0.8em;
+    margin: 0.8em 0;
+    color: rgba(var(--chatbot-text-color), 0.8);
+  }
+
+  // Paragraphs
+  p {
+    margin: 0.4em 0;
+    word-wrap: break-word;
+  }
+
+  // Links
+  a {
+    color: var(--chatbot-primary-color);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Tables
+  table {
+    border-collapse: collapse;
+    margin: 0.8em 0;
+    font-size: 0.9em;
+  }
+
+  th, td {
+    border: 1px solid var(--chatbot-border-color);
+    padding: 0.3em 0.6em;
+    text-align: left;
+  }
+
+  th {
+    background-color: rgba(var(--chatbot-primary-color), 0.1);
+    font-weight: 600;
+  }
+}
