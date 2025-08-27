@@ -11,7 +11,8 @@ import { defaultCmsContentProviders, layoutConfigFactory, mediaConfig } from "@s
   providers: [provideConfigFactory(layoutConfigFactory), provideConfig(mediaConfig), ...defaultCmsContentProviders, provideConfig(<OccConfig>{
     backend: {
       occ: {
-        baseUrl: 'https://api.c90spw6e32-arganollc1-d1-public.model-t.cc.commerce.ondemand.com',
+        // baseUrl: 'https://api.c90spw6e32-arganollc1-d1-public.model-t.cc.commerce.ondemand.com',
+        baseUrl: 'https://localhost:9002',
       }
     },
   }), provideConfig(<SiteContextConfig>{
