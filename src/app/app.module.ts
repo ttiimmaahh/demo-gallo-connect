@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, SecurityContext } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -21,7 +21,9 @@ import { ChatbotModule } from './components/chatbot/chatbot.module';
     StoreModule.forRoot({}),
     AppRoutingModule,
     EffectsModule.forRoot([]),
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot({
+      sanitize: SecurityContext.NONE // We trust the LLM content, enhanced styling via CSS
+    }),
     SpartacusModule,
     ChatbotModule
   ],

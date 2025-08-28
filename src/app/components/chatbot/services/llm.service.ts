@@ -16,6 +16,7 @@ export interface LLMServiceConfig {
   primaryProvider: LLMProviderType;
   fallbackProvider?: LLMProviderType;
   enableFallback: boolean;
+  maxToolCallIterations?: number; // Maximum iterations for tool calling loop (default: 5)
   providers: {
     [key in LLMProviderType]?: LLMConfig;
   };
@@ -48,11 +49,26 @@ export class LLMService {
 **Your Capabilities:**
 - Access real-time product information from the SAP Commerce backend
 - Retrieve order status and history for authenticated users
+- Retrieve order details for a specific order
 - Provide shipping and delivery information
 - Help with account management (when user is logged in)
 - Assist with product recommendations and comparisons
-- Guide users through the shopping process
+- Guide users through the ordering process
 - Answer questions about policies (returns, shipping, etc.)
+
+**CRITICAL: Conversation Continuity & Context Awareness:**
+- MAINTAIN CONVERSATION CONTEXT: Always remember what you've discussed with the user in this conversation
+- BUILD ON PREVIOUS RESPONSES: When the user asks follow-up questions, refer back to information you've already provided
+- NEVER RESET TO GREETING: Do not restart the conversation or act like you're meeting the user for the first time unless they explicitly start a new conversation
+- REFERENCE PREVIOUS TOOL RESULTS: If you've already retrieved information (like order history), reference it when answering follow-up questions
+- NATURAL FLOW: Continue conversations naturally - if you showed recent orders and the user asks about a specific order, use the order details tool to get that information
+- CONTEXT CLUES: Pay attention to context clues in user messages that reference previous parts of the conversation
+
+**Tool Usage Guidelines:**
+- When you've used a tool to get information, remember that information for follow-up questions
+- If a user references specific data you've shown them (like "order 00000001"), use appropriate tools to get detailed information
+- Don't repeat the same information unless specifically asked to refresh it
+- Build upon previous tool results rather than starting fresh each time
 
 **Important Guidelines:**
 - Always verify user authentication before accessing personal data (orders, account info)
@@ -650,7 +666,25 @@ Remember: Always aim to solve the customer's needs efficiently while maintaining
 
     const updatedMessages = [...messages, assistantMessage];
 
-    // Execute all tool calls
+    // Start iterative tool calling process
+    return this.executeIterativeToolCalls(updatedMessages, toolCalls, 1);
+  }
+
+  /**
+   * Execute tool calls iteratively until LLM provides final response or max iterations reached
+   */
+  private executeIterativeToolCalls(messages: LLMMessage[], toolCalls: LLMToolCall[], iteration: number): Observable<string> {
+    const config = this.configSubject.value;
+    const MAX_ITERATIONS = config?.maxToolCallIterations || 3; // Prevent infinite loops
+    
+    console.log(`${this.LOG_PREFIX} Starting tool call iteration ${iteration}/${MAX_ITERATIONS}`);
+    
+    if (iteration > MAX_ITERATIONS) {
+      console.warn(`${this.LOG_PREFIX} Maximum tool call iterations (${MAX_ITERATIONS}) reached. Stopping.`);
+      return of('I apologize, but I reached the maximum number of tool iterations while processing your request. Please try rephrasing your question or contact support if you continue to experience issues.');
+    }
+
+    // Execute all tool calls for this iteration
     const toolExecutions = toolCalls.map(toolCall => {
       return this.executeMCPTool(toolCall).pipe(
         map(result => ({
@@ -675,9 +709,20 @@ Remember: Always aim to solve the customer's needs efficiently while maintaining
       Promise.all(toolExecutions.map(obs => obs.toPromise())).then(toolResults => {
         // Filter out any undefined results and add tool results to conversation
         const validToolResults = toolResults.filter(result => result !== undefined);
-        const messagesWithToolResults = [...updatedMessages, ...validToolResults];
+        const messagesWithToolResults = [...messages, ...validToolResults];
         
-        // Get another LLM response with the tool results
+        console.log(`${this.LOG_PREFIX} Tool execution completed for iteration ${iteration}. Requesting LLM follow-up...`);
+        
+        // Log tool results for debugging
+        console.log(`${this.LOG_PREFIX} Tool results for iteration ${iteration}:`, 
+          validToolResults.map(result => ({
+            tool_call_id: result.tool_call_id,
+            contentLength: result.content?.length || 0,
+            hasError: result.content?.includes('Error') || false
+          }))
+        );
+        
+        // Get LLM response with the tool results
         const currentProvider = this.currentProviderSubject.value;
         const provider = this.providers.get(currentProvider);
         
@@ -687,17 +732,62 @@ Remember: Always aim to solve the customer's needs efficiently while maintaining
           return;
         }
 
-        provider.generateResponse(messagesWithToolResults).subscribe({
+        // Add context-preserving instruction as a system message before getting LLM response
+        const contextMessage: LLMMessage = {
+          role: 'system',
+          content: 'IMPORTANT: Use the tool results above to continue your conversation with the user naturally. Do not restart the conversation or act like you are meeting them for the first time. Build upon what you have already discussed.',
+          timestamp: new Date()
+        };
+        
+        const messagesWithContext = [...messagesWithToolResults, contextMessage];
+
+        // Add timeout to prevent iterations from running too long
+        const responseTimeout = timer(30000); // 30 second timeout per iteration
+        
+        provider.generateResponse(messagesWithContext).subscribe({
           next: (followupResponse) => {
-            observer.next(followupResponse.content);
-            observer.complete();
+            console.log(`${this.LOG_PREFIX} LLM response for iteration ${iteration}:`, {
+              hasContent: !!followupResponse.content,
+              hasToolCalls: !!followupResponse.tool_calls?.length,
+              toolCallCount: followupResponse.tool_calls?.length || 0
+            });
+
+            // Check if LLM wants to make more tool calls
+            if (followupResponse.tool_calls && followupResponse.tool_calls.length > 0) {
+              console.log(`${this.LOG_PREFIX} LLM requesting ${followupResponse.tool_calls.length} additional tool calls in iteration ${iteration + 1}`);
+              
+              // Add the assistant's response with new tool calls to conversation
+              const assistantMessageWithNewCalls: LLMMessage = {
+                role: 'assistant',
+                content: followupResponse.content || '',
+                tool_calls: followupResponse.tool_calls,
+                timestamp: new Date()
+              };
+              
+              const updatedMessagesWithAssistant = [...messagesWithContext, assistantMessageWithNewCalls];
+              
+              // Continue with next iteration
+              this.executeIterativeToolCalls(updatedMessagesWithAssistant, followupResponse.tool_calls, iteration + 1)
+                .subscribe({
+                  next: (finalResponse) => observer.next(finalResponse),
+                  error: (error) => observer.error(error),
+                  complete: () => observer.complete()
+                });
+            } else {
+              // No more tool calls needed - return final response
+              console.log(`${this.LOG_PREFIX} Tool calling complete after ${iteration} iterations. Returning final response.`);
+              observer.next(followupResponse.content);
+              observer.complete();
+            }
           },
           error: (error) => {
+            console.error(`${this.LOG_PREFIX} LLM follow-up failed in iteration ${iteration}:`, error);
             observer.next(`Tools executed successfully, but follow-up response failed: ${error.message}`);
             observer.complete();
           }
         });
       }).catch(error => {
+        console.error(`${this.LOG_PREFIX} Tool execution failed in iteration ${iteration}:`, error);
         observer.next(`Tool execution failed: ${error.message}`);
         observer.complete();
       });
@@ -813,7 +903,8 @@ Remember: Always aim to solve the customer's needs efficiently while maintaining
       }
     }).join('\n\n');
     
-    return `✅ Tool Result:\n${formattedContent}`;
+    // Enhanced formatting with context preservation instructions
+    return `✅ Tool Result (use this information to continue the conversation naturally):\n${formattedContent}`;
   }
 
   public getProviderStatus(): Observable<{ [key: string]: any }> {
@@ -1014,6 +1105,13 @@ Remember: Always aim to solve the customer's needs efficiently while maintaining
           timestamp: new Date() 
         };
         this.addToConversationHistory(sessionId!, assistantMsg);
+        
+        // Log conversation context for debugging
+        console.log(`${this.LOG_PREFIX} Session ${sessionId} conversation context maintained:`, {
+          historyLength: this.getConversationHistory(sessionId!).length,
+          lastUserMessage: userMessage.substring(0, 50),
+          responsePreview: response.substring(0, 100)
+        });
         
         return { response, sessionId: sessionId! };
       }),
