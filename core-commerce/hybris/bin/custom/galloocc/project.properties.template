@@ -1,0 +1,17 @@
+# ---------------------------------------------------------------------------
+# Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+# ---------------------------------------------------------------------------
+# you can put key/value pairs here.
+# Use Config.getParameter(..) to retrieve the values during runtime.
+
+galloocc.key=value
+
+# Specifies the location of the spring context file added automatically to the global platform application context.
+galloocc.application-context=galloocc-spring.xml
+
+# Specifies the location of the spring context file which will be added to commerce web services web context
+ycommercewebservices.additionalWebSpringConfigs.galloocc=classpath:/galloocc/web/spring/galloocc-web-spring.xml
+
+#Use for generating static swagger documentation
+galloocc.documentation.static.generate=true
+ext.galloocc.extension.webmodule.webroot=/rest/v2

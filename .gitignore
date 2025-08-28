@@ -1,45 +1,90 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
-
-# IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
-
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
-# System files
+# folders/files to always ignore
+.metadata
 .DS_Store
-Thumbs.db
+**/gensrc
 
-# spartacus schematics credentials
-.npmrc
+#IDE files
+.gradle
+.idea
+idea-module-files
+*.iml
+com.springsource.sts.config.flow.prefs
+org.sonar.ide.eclipse.core.prefs
+HybrisCodeGeneration.launch
+
+org.springframework.ide.eclipse.beans.core.prefs
+org.springframework.ide.eclipse.core.prefs
+.springBeans
+eclipsebin
+
+# NPM packages
+**/node_modules
+
+# Compiled class file
+*.class
+
+# Test classes
+**/testclasses
+
+# Generated jalo java files
+**/jalo
+
+# allow only custom extensions
+**/hybris/bin/*
+!**/hybris/bin/custom/
+ 
+# Folders to ignore at the root of the repository
+**/hybris/roles/
+**/hybris/log/
+**/hybris/temp/
+**/hybris/data/
+**/hybris/config/orbeon
+
+# Filename patterns to ignore
+*.class
+build.xml
+Generated*.java
+platformhome.properties
+*testclasses.xml
+extensioninfo.xsd
+*hmc.jar
+hmc.xsd
+items.xsd
+beans.xsd
+ruleset.xml
+*.log
+.pmd
+*build.number
+
+base.properties
+#  Addon specific copy folders
+**/_ui/addons
+**/views/addons
+**/tld/addons
+**/tags/addons
+**/messages/addons
+**/web/addonsrc
+**/_ui-src/addons
+**/web/addontestsrc
+**/web/commonwebsrc/*/
+
+*_bof.jar
+
+# Java generated files #
+*.class
+*.war
+*.ear
+
+# Commerce Ant generated files #
+gensrc/
+build.xml
+extensioninfo.xsd
+hmc.xsd
+platformhome.properties
+*-testclasses.xml
+*-webtestclasses.xml
+*-hmctestclasses.xml
+beans.xsd
+items.xsd
+classes/
+eclipsebin/
