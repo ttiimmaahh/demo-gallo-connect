@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -12,7 +12,8 @@ import { ChatbotConfigService } from './config/chatbot-config.service';
   selector: 'app-chatbot',
   standalone: false,
   templateUrl: './chatbot.component.html',
-  styleUrls: ['./chatbot.component.scss'],
+  styleUrl: './chatbot.component.scss',
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('chatboxAnimation', [
       state('closed', style({
@@ -258,21 +259,18 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   public formatMessageText(text: string): string {
-    // Enhanced text formatting for better readability
+    // Simplified text formatting - focus on readability without breaking content
     return text
       // Convert bullet points to proper markdown
       .replace(/^• /gm, '- ')
-      // Ensure proper line breaks for lists
       .replace(/\n•/g, '\n- ')
-      // Format error messages
+      
+      // Format tool result indicators (but keep content unchanged)
       .replace(/❌ Tool Error:/g, '\n**❌ Tool Error:**')
-      // Format success messages  
       .replace(/✅ Tool Result:/g, '\n**✅ Tool Result:**')
-      // Format resource indicators
       .replace(/📄 Resource:/g, '\n**📄 Resource:**')
-      // Ensure proper spacing around headings
-      .replace(/\n([#]{1,6})/g, '\n\n$1')
-      // Clean up multiple newlines
+      
+      // Clean up excessive whitespace (but preserve structure)
       .replace(/\n{3,}/g, '\n\n')
       .trim();
   }

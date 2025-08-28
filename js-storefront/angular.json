@@ -55,7 +55,8 @@
               "src/styles/spartacus/storefinder.scss",
               "src/styles/spartacus/asm.scss",
               "src/styles/spartacus/estimated-delivery-date.scss",
-              "src/styles/spartacus/product.scss"
+              "src/styles/spartacus/product.scss",
+              "src/styles/spartacus/chatbot.scss"
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
@@ -140,7 +141,8 @@
               "src/styles/spartacus/storefinder.scss",
               "src/styles/spartacus/asm.scss",
               "src/styles/spartacus/estimated-delivery-date.scss",
-              "src/styles/spartacus/product.scss"
+              "src/styles/spartacus/product.scss",
+              "src/styles/spartacus/chatbot.scss"
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
