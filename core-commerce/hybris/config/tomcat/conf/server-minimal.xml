@@ -1,8 +1,6 @@
 
 <Server port="${tomcat.internalserver.port}" shutdown="SHUTDOWN">
 
-  <Listener className="org.apache.catalina.mbeans.JmxRemoteLifecycleListener" rmiRegistryPortPlatform="${tomcat.jmx.port}" rmiServerPortPlatform="${tomcat.jmx.server.port}" />
-
   <!-- If you want to use the jndi uncoment this listener
   <Listener className="de.hybris.tomcat.HybrisGlobalResourcesLifecycleListener"  dataSourceName="${db.pool.fromJNDI}"/>
   -->
@@ -53,7 +51,6 @@
 
     <Connector port="${tomcat.http.port}" 
     				maxHttpHeaderSize="8192"
-               maxThreads="${tomcat.maxthreads}" 
                protocol="HTTP/1.1"
                executor="hybrisExecutor"
                enableLookups="false" 
@@ -65,7 +62,6 @@
 
     <Connector port="${tomcat.ssl.port}" 
     				maxHttpHeaderSize="8192"
-               maxThreads="150" 
                protocol="HTTP/1.1"
                executor="hybrisExecutor"
                enableLookups="false" 

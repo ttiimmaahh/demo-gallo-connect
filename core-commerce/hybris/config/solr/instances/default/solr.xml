@@ -2,6 +2,7 @@
 
 <solr>
 	<str name="coreRootDirectory">${solr.data.home:./}</str>
+	<str name="modules">${solr.modules:analysis-extras,hybris}</str>
 
 	<solrcloud>
 		<str name="host">${host:}</str>
@@ -33,4 +34,7 @@
 		<int name="socketTimeout">${socketTimeout:600000}</int>
 		<int name="connTimeout">${connTimeout:60000}</int>
 	</shardHandlerFactory>
+
+	<!-- Settings for affinity replica placement plugin -->
+	<!--<replicaPlacementFactory class="org.apache.solr.cluster.placement.plugins.AffinityPlacementFactory"/>-->
 </solr>
