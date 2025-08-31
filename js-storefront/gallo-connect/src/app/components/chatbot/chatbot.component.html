@@ -1,0 +1,210 @@
+<!-- Floating Action Button -->
+<button 
+  class="chatbot-fab"
+  [@fabAnimation]="getFabAnimationState()"
+  (click)="toggleChat()"
+  [attr.aria-label]="chatbotState.isOpen ? 'Close chat' : 'Open chat'"
+  [attr.aria-expanded]="chatbotState.isOpen"
+  type="button">
+  <i class="fas fa-comments" *ngIf="!chatbotState.isOpen"></i>
+  <i class="fas fa-times" *ngIf="chatbotState.isOpen"></i>
+</button>
+
+<!-- Chat Window -->
+<div 
+  class="chatbot-container"
+  [@chatboxAnimation]="getChatboxAnimationState()"
+  [@maximizeAnimation]="isMaximized ? 'maximized' : 'normal'"
+  [class.chatbot-open]="chatbotState.isOpen"
+  [class.chatbot-maximized]="isMaximized"
+  role="dialog"
+  aria-labelledby="chatbot-header"
+  [attr.aria-hidden]="!chatbotState.isOpen">
+  
+  <!-- Chat Header -->
+  <div class="chatbot-header" id="chatbot-header">
+    <div class="chatbot-header-content">
+      <div class="chatbot-avatar">
+        <i class="fas fa-robot"></i>
+      </div>
+      <div class="chatbot-title">
+        <h3>Gallo Connect Assistant</h3>
+        <span class="chatbot-status">Online</span>
+      </div>
+    </div>
+    <div class="chatbot-actions">
+      <button 
+        class="chatbot-clear-btn"
+        (click)="clearChat()"
+        title="Clear conversation"
+        aria-label="Clear conversation"
+        type="button">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+      <button 
+        class="chatbot-maximize-btn"
+        (click)="toggleMaximize()"
+        [title]="isMaximized ? 'Minimize chat' : 'Maximize chat'"
+        [attr.aria-label]="isMaximized ? 'Minimize chat' : 'Maximize chat'"
+        type="button">
+        <i [class]="isMaximized ? 'fas fa-compress' : 'fas fa-expand'"></i>
+      </button>
+      <button 
+        *ngIf="shouldShowConfigButton()"
+        class="chatbot-config-btn"
+        (click)="toggleConfig()"
+        title="AI Configuration"
+        aria-label="AI Configuration"
+        type="button">
+        <i class="fas fa-cog"></i>
+      </button>
+      <button 
+        class="chatbot-close-btn"
+        (click)="closeChat()"
+        title="Close chat"
+        aria-label="Close chat"
+        type="button">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Configuration Panel -->
+  <div class="chatbot-config-panel" *ngIf="showConfig" [@messageAnimation]>
+    <div class="config-tabs" *ngIf="shouldShowLLMTab() || shouldShowMCPTab()">
+      <button 
+        *ngIf="shouldShowLLMTab()"
+        class="config-tab"
+        [class.active]="activeConfigTab === 'llm'"
+        (click)="activeConfigTab = 'llm'">
+        🤖 AI Configuration
+      </button>
+      <button 
+        *ngIf="shouldShowMCPTab()"
+        class="config-tab"
+        [class.active]="activeConfigTab === 'mcp'"
+        (click)="activeConfigTab = 'mcp'">
+        🔌 MCP Servers
+      </button>
+      <button 
+        *ngIf="shouldShowMCPTab()"
+        class="config-tab"
+        [class.active]="activeConfigTab === 'debug'"
+        (click)="activeConfigTab = 'debug'">
+        🔍 Debug
+      </button>
+    </div>
+    
+    <div class="config-content">
+      <app-chatbot-config *ngIf="activeConfigTab === 'llm' && shouldShowLLMTab()"></app-chatbot-config>
+      <app-mcp-config *ngIf="activeConfigTab === 'mcp' && shouldShowMCPTab()"></app-mcp-config>
+      <app-debug-mcp *ngIf="activeConfigTab === 'debug' && shouldShowMCPTab()"></app-debug-mcp>
+      
+      <!-- Production Mode Notice -->
+      <div *ngIf="!shouldShowLLMTab() && !shouldShowMCPTab()" class="production-notice">
+        <h4>🔒 Production Mode</h4>
+        <p>Configuration is managed by system administrators.</p>
+        <p>Contact support if you need assistance with the AI assistant capabilities.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages Container -->
+  <div 
+    class="chatbot-messages"
+    #messagesContainer
+    role="log"
+    aria-live="polite"
+    aria-label="Chat messages"
+    [class.hidden]="showConfig">
+    
+    <!-- Messages -->
+    <div 
+      *ngFor="let message of chatbotState.messages; trackBy: trackByMessageId"
+      [ngClass]="getMessageClasses(message)"
+      [@messageAnimation]
+      role="article"
+      [attr.aria-label]="message.sender === 'user' ? 'Your message' : 'Assistant message'">
+      
+      <div class="message-avatar" *ngIf="message.sender === 'bot'">
+        <i class="fas fa-robot"></i>
+      </div>
+      
+      <div class="message-content">
+        <div class="message-text">
+          <!-- Render markdown for bot messages, plain text for user messages -->
+          <div *ngIf="message.sender === 'bot'" 
+               markdown 
+               [data]="formatMessageText(message.text)"
+               class="markdown-content">
+          </div>
+          <div *ngIf="message.sender === 'user'" class="user-message-text">
+            {{ message.text }}
+          </div>
+        </div>
+        <div class="message-timestamp">{{ formatTimestamp(message.timestamp) }}</div>
+      </div>
+      
+      <div class="message-avatar" *ngIf="message.sender === 'user'">
+        <i class="fas fa-user"></i>
+      </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div 
+      *ngIf="chatbotState.isTyping"
+      class="message message-bot typing-indicator"
+      [@typingAnimation]
+      role="status"
+      aria-label="Assistant is typing">
+      
+      <div class="message-avatar">
+        <i class="fas fa-robot"></i>
+      </div>
+      
+      <div class="message-content">
+        <div class="typing-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="chatbot-input-area" [class.hidden]="showConfig">
+    <form (ngSubmit)="sendMessage()" class="chatbot-input-form">
+      <div class="input-group">
+        <input
+          #messageInput
+          type="text"
+          class="chatbot-input"
+          name="messageInput"
+          [(ngModel)]="currentMessage"
+          (input)="onInputChange($event)"
+          (keypress)="onKeyPress($event)"
+          placeholder="Type your message..."
+          aria-label="Type your message"
+          autocomplete="off"
+          [disabled]="chatbotState.isTyping">
+        
+        <button
+          type="submit"
+          class="chatbot-send-btn"
+          [disabled]="isSendDisabled"
+          aria-label="Send message">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Backdrop for mobile -->
+<div 
+  class="chatbot-backdrop"
+  *ngIf="chatbotState.isOpen"
+  (click)="closeChat()"
+  aria-hidden="true">
+</div>

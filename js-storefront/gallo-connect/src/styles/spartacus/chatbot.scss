@@ -1,0 +1,42 @@
+// Chatbot component global styles
+// This file contains any global styles needed for the chatbot component that should be loaded with other Spartacus styles
+
+// Import Font Awesome icons if not already included
+// These styles ensure chatbot icons are available globally
+.fas.fa-comments,
+.fas.fa-times,
+.fas.fa-robot,
+.fas.fa-user,
+.fas.fa-paper-plane,
+.fas.fa-trash-alt {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+}
+
+// Global chatbot z-index management to ensure it appears above all Spartacus components
+app-chatbot {
+  z-index: 1050 !important; // Above Spartacus modals and overlays
+}
+
+// Ensure chatbot doesn't interfere with Spartacus responsive breakpoints
+@media (max-width: 767.98px) {
+  app-chatbot {
+    // Mobile-specific adjustments if needed
+  }
+}
+
+// Integration with Spartacus theming
+:root {
+  // Chatbot can inherit Spartacus CSS custom properties
+  --chatbot-primary-color: var(--cx-color-primary, #0066cc);
+  --chatbot-secondary-color: var(--cx-color-secondary, #004499);
+  --chatbot-text-color: var(--cx-color-text, #333333);
+  --chatbot-background-color: var(--cx-color-background, #ffffff);
+  --chatbot-border-color: var(--cx-color-medium, #e0e0e0);
+}
+
+// Simplified chatbot markdown styling - conservative approach
+// .markdown-content {
+  // Use component-level styling instead of global overrides
+  // This file provides fallback/global styles only
+// }

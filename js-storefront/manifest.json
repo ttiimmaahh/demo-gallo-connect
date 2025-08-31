@@ -1,0 +1,17 @@
+{
+  "applications": [
+    {
+      "name": "Gallo Connect",
+      "path": "gallo-connect",
+      "ssr": {
+        "enabled": true,
+        "path": "dist/gallo-connect/server/server.mjs"
+      },
+      "csr": {
+        "webroot": "dist/gallo-connect/browser/"
+      },
+      "enabledRepositories": ["spartacus-6"]
+    }
+  ],
+  "nodeVersion": "20"
+}
