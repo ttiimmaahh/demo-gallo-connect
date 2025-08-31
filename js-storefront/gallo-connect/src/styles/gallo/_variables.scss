@@ -1,0 +1,45 @@
+// src/styles/scss/sparta-green/_variables.scss
+
+// 1. FONT OVERRIDES
+// Override the default font families
+$font-family-sans-serif: 'Poppins', sans-serif;
+$font-family-serif: 'Georgia', serif;
+$font-family-base: $font-family-sans-serif;
+$headings-font-family: 'Montserrat', sans-serif;
+
+// 2. COLOR OVERRIDES
+// Define your new brand colors
+$green-primary: #f4ae47;
+// $green-secondary: #006400;
+// $green-light: #90ee90;
+$gallo-dark: #f4ae47;
+
+// Override the default theme colors
+$primary: $green-primary;
+// $secondary: $green-secondary;
+// $success: $green-light;
+$danger: #dc3545;
+$warning: #ffc107;
+$info: #17a2b8;
+$light: #f8f9fa;
+$dark: $gallo-dark;
+
+// Override text and background colors
+$body-color: #333;
+$body-bg: #ffffff;
+$text-muted: #6c757d;
+
+// 3. SPACING & BORDER OVERRIDES
+// Make all components have a more rounded look
+$border-radius: 0.75rem;
+$border-radius-lg: 1rem;
+$border-radius-sm: 0.5rem;
+
+// 4. COMPONENT-SPECIFIC OVERRIDES
+// Example: Customize button styles
+$btn-padding-y: 0.75rem;
+$btn-padding-x: 1.5rem;
+$btn-font-weight: 600;
+
+// You can find all available variables to override in:
+// node_modules/@spartacus/styles/scss/variables

@@ -1,0 +1,21 @@
+// src/styles/scss/sparta-green/_components.scss
+
+// Custom styles for the header
+cx-category-navigation {
+  cx-navigation-ui {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+}
+
+header {
+    background: linear-gradient(to top, #000000 67px, #ffffff 0) !important;
+}
+
+// Custom styles for the footer
+cx-footer-navigation {
+  cx-navigation-ui {
+    background-color: $gallo-dark !important;
+    color: #000000 !important;
+  }
+}

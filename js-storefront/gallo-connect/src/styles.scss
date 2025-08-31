@@ -21,5 +21,9 @@
 @import '@spartacus/styles/vendor/bootstrap/scss/alert';
 @import '@spartacus/styles/vendor/bootstrap/scss/tooltip';
 
+
+@import 'styles/gallo/index';
+
+
 // ORDER IMPORTANT: Spartacus styles last
 @import '@spartacus/styles/index';

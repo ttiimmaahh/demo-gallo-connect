@@ -70,7 +70,7 @@ export class ChatbotConfigService {
         
         providers: {
           local: {
-            apiUrl: 'http://192.168.10.110:1234', // Your LM Studio URL
+            apiUrl: 'http://192.168.10.111:1234', // Your LM Studio URL
             model: 'openai/gpt-oss-20b',
             apiType: 'openai-compatible',
             temperature: 0.7,
