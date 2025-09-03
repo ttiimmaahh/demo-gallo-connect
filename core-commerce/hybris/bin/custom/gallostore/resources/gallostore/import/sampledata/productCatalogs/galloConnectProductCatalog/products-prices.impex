@@ -1,0 +1,99 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# ImpEx for Importing Gallo Connect Store Prices
+#% impex.setLocale( Locale.GERMAN );
+
+$productCatalog = galloConnectProductCatalog
+$catalogVersion = catalogversion(catalog(id[default = $productCatalog]), version[default = 'Staged'])[unique = true, default = '$productCatalog:Staged']
+$prices = Europe1prices[translator = de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]
+$taxGroup = Europe1PriceFactory_PTG(code)[default = us-sales-tax-full]
+$distributorPriceGroup = DISTRIBUTOR_PRICE_GROUP
+
+# Set product approval status to Approved only for those products that have prices.
+$approved = approvalstatus(code)[default = 'approved']
+
+
+INSERT_UPDATE PriceRow; product(code, $catalogVersion)[unique = true]; currency(isocode)[unique = true]; price ; unit(code)[unique = true]; minqtd[unique = true]; ug(code)[unique = true]
+                      ; WN-CAB-EST-750                               ; USD                             ; 15.00 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; WN-CAB-EST-750                               ; USD                             ; 12.50 ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; WN-CAB-EST-750                               ; USD                             ; 11.00 ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; WN-CAB-EST-750                               ; USD                             ; 9.75  ; bottle                   ; 672                  ; $distributorPriceGroup
+
+                      ; WN-CHA-RES-750                               ; USD                             ; 13.00 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; WN-CHA-RES-750                               ; USD                             ; 11.50 ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; WN-CHA-RES-750                               ; USD                             ; 10.25 ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; WN-CHA-RES-750                               ; USD                             ; 9.10  ; bottle                   ; 672                  ; $distributorPriceGroup
+
+                      ; AP-RED-750                                   ; USD                             ; 8.00  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; AP-RED-750                                   ; USD                             ; 7.20  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; AP-RED-750                                   ; USD                             ; 6.50  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; AP-RED-750                                   ; USD                             ; 5.90  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; LM-PRO-750                                   ; USD                             ; 10.50 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; LM-PRO-750                                   ; USD                             ; 9.25  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; LM-PRO-750                                   ; USD                             ; 8.50  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; LM-PRO-750                                   ; USD                             ; 7.75  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; DH-CAB-750                                   ; USD                             ; 7.50  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; DH-CAB-750                                   ; USD                             ; 6.80  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; DH-CAB-750                                   ; USD                             ; 6.10  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; DH-CAB-750                                   ; USD                             ; 5.50  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; BF-MOS-750                                   ; USD                             ; 5.00  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; BF-MOS-750                                   ; USD                             ; 4.50  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; BF-MOS-750                                   ; USD                             ; 4.00  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; BF-MOS-750                                   ; USD                             ; 3.60  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; CR-CAB-750                                   ; USD                             ; 9.00  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; CR-CAB-750                                   ; USD                             ; 8.10  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; CR-CAB-750                                   ; USD                             ; 7.30  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; CR-CAB-750                                   ; USD                             ; 6.60  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; BF-PGR-750                                   ; USD                             ; 5.00  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; BF-PGR-750                                   ; USD                             ; 4.50  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; BF-PGR-750                                   ; USD                             ; 4.00  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; BF-PGR-750                                   ; USD                             ; 3.60  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; WH-CHA-750                                   ; USD                             ; 11.00 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; WH-CHA-750                                   ; USD                             ; 9.90  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; WH-CHA-750                                   ; USD                             ; 8.90  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; WH-CHA-750                                   ; USD                             ; 8.00  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; AP-INF-750                                   ; USD                             ; 12.00 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; AP-INF-750                                   ; USD                             ; 10.80 ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; AP-INF-750                                   ; USD                             ; 9.70  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; AP-INF-750                                   ; USD                             ; 8.75  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; LM-ROS-750                                   ; USD                             ; 10.50 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; LM-ROS-750                                   ; USD                             ; 9.25  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; LM-ROS-750                                   ; USD                             ; 8.50  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; LM-ROS-750                                   ; USD                             ; 7.75  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; DH-MER-750                                   ; USD                             ; 7.50  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; DH-MER-750                                   ; USD                             ; 6.80  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; DH-MER-750                                   ; USD                             ; 6.10  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; DH-MER-750                                   ; USD                             ; 5.50  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; BF-CHA-750                                   ; USD                             ; 5.00  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; BF-CHA-750                                   ; USD                             ; 4.50  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; BF-CHA-750                                   ; USD                             ; 4.00  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; BF-CHA-750                                   ; USD                             ; 3.60  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; RA-ZIN-750                                   ; USD                             ; 10.00 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; RA-ZIN-750                                   ; USD                             ; 9.00  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; RA-ZIN-750                                   ; USD                             ; 8.10  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; RA-ZIN-750                                   ; USD                             ; 7.30  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; JV-PIN-750                                   ; USD                             ; 25.00 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; JV-PIN-750                                   ; USD                             ; 22.50 ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; JV-PIN-750                                   ; USD                             ; 20.25 ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; JV-PIN-750                                   ; USD                             ; 18.25 ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; TB-CHA-750                                   ; USD                             ; 18.00 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; TB-CHA-750                                   ; USD                             ; 16.20 ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; TB-CHA-750                                   ; USD                             ; 14.60 ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; TB-CHA-750                                   ; USD                             ; 13.15 ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; AP-WHI-750                                   ; USD                             ; 8.00  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; AP-WHI-750                                   ; USD                             ; 7.20  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; AP-WHI-750                                   ; USD                             ; 6.50  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; AP-WHI-750                                   ; USD                             ; 5.90  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; BF-SBL-750                                   ; USD                             ; 5.00  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; BF-SBL-750                                   ; USD                             ; 4.50  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; BF-SBL-750                                   ; USD                             ; 4.00  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; BF-SBL-750                                   ; USD                             ; 3.60  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; DH-ROS-750                                   ; USD                             ; 7.50  ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; DH-ROS-750                                   ; USD                             ; 6.80  ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; DH-ROS-750                                   ; USD                             ; 6.10  ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; DH-ROS-750                                   ; USD                             ; 5.50  ; bottle                   ; 672                  ; $distributorPriceGroup
+                      ; OS-PAPI-750                                  ; USD                             ; 45.00 ; bottle                   ; 1                    ; $distributorPriceGroup
+                      ; OS-PAPI-750                                  ; USD                             ; 41.50 ; bottle                   ; 12                   ; $distributorPriceGroup
+                      ; OS-PAPI-750                                  ; USD                             ; 38.00 ; bottle                   ; 120                  ; $distributorPriceGroup
+                      ; OS-PAPI-750                                  ; USD                             ; 35.00 ; bottle                   ; 672                  ; $distributorPriceGroup

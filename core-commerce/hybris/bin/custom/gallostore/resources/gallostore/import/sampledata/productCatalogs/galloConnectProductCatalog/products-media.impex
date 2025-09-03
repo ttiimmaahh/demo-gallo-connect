@@ -1,0 +1,87 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# ImPex for Importing Product Media into Gallo Connect Store
+
+# Macros / Replacement Parameter definitions
+$productCatalog = galloConnectProductCatalog
+$catalogVersion = catalogversion(catalog(id[default = $productCatalog]), version[default = 'Staged'])[unique = true, default = $productCatalog:Staged]
+$siteResource = jar:com.gallo.store.constants.GallostoreConstants&/gallostore/import/sampledata/productCatalogs/$productCatalog
+$thumbnail = thumbnail(code, $catalogVersion)
+$picture = picture(code, $catalogVersion)
+$thumbnails = thumbnails(code, $catalogVersion)
+$detail = detail(code, $catalogVersion)
+$normal = normal(code, $catalogVersion)
+$others = others(code, $catalogVersion)
+$data_sheet = data_sheet(code, $catalogVersion)
+$medias = medias(code, $catalogVersion)
+$galleryImages = galleryImages(qualifier, $catalogVersion)
+
+INSERT_UPDATE MediaFolder; qualifier[unique = true]; path[unique = true]
+                         ; images                  ; images
+
+INSERT_UPDATE Media; mediaFormat(qualifier); code[unique = true]                        ; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/jpeg']; $catalogVersion; folder(qualifier)[default = images]
+                   ; 300Wx300H             ; /300Wx300H/apothic-inferno.jpg             ; $siteResource/images/300Wx300H/apothic-inferno.jpg                          ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/apothic-red-blend.jpg           ; $siteResource/images/300Wx300H/apothic-red-blend.jpg                        ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/apothic-white.jpg               ; $siteResource/images/300Wx300H/apothic-white.jpg                            ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/barefoot-chardonnay.jpg         ; $siteResource/images/300Wx300H/barefoot-chardonnay.jpg                      ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/barefoot-moscato.jpg            ; $siteResource/images/300Wx300H/barefoot-moscato.jpg                         ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/barefoot-pino-grigio.jpg        ; $siteResource/images/300Wx300H/barefoot-pino-grigio.jpg                     ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/barefoot-sauv-blanc.jpg         ; $siteResource/images/300Wx300H/barefoot-sauv-blanc.jpg                      ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/carnivor-cabernet-sauvignon.jpg ; $siteResource/images/300Wx300H/carnivor-cabernet-sauvignon.jpg              ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/dark-horse-cab.jpg              ; $siteResource/images/300Wx300H/dark-horse-cab.jpg                           ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/dark-horse-merlot.jpg           ; $siteResource/images/300Wx300H/dark-horse-merlot.jpg                        ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/estate-cab-sauv.jpg             ; $siteResource/images/300Wx300H/estate-cab-sauv.jpg                          ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/jvineyards-pinot-noir.jpg       ; $siteResource/images/300Wx300H/jvineyards-pinot-noir.jpg                    ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/la-marca-prosecco.jpg           ; $siteResource/images/300Wx300H/la-marca-prosecco.jpg                        ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/papillon-red.jpg                ; $siteResource/images/300Wx300H/papillon-red.jpg                             ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/ranch-zabaco.jpg                ; $siteResource/images/300Wx300H/ranch-zabaco.jpg                             ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/reserve-chardonnay.jpg          ; $siteResource/images/300Wx300H/reserve-chardonnay.jpg                       ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/talbot-kali-hart.jpg            ; $siteResource/images/300Wx300H/talbot-kali-hart.jpg                         ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/william-hill-chardonnay.jpg     ; $siteResource/images/300Wx300H/william-hill-chardonnay.jpg                  ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/la-marca-prosecco-rose.jpg      ; $siteResource/images/300Wx300H/la-marca-prosecco-rose.jpg                   ;                             ;                ;
+                   ; 300Wx300H             ; /300Wx300H/dark-horse-rose.jpg             ; $siteResource/images/300Wx300H/dark-horse-rose.jpg                          ;                             ;                ;
+
+INSERT_UPDATE MediaContainer; qualifier[unique = true]    ; $medias                                    ; $catalogVersion
+                            ; apothic-inferno             ; /300Wx300H/apothic-inferno.jpg             ;
+                            ; apothic-red-blend           ; /300Wx300H/apothic-red-blend.jpg           ;
+                            ; apothic-white               ; /300Wx300H/apothic-white.jpg               ;
+                            ; barefoot-chardonnay         ; /300Wx300H/barefoot-chardonnay.jpg         ;
+                            ; barefoot-moscato            ; /300Wx300H/barefoot-moscato.jpg            ;
+                            ; barefoot-pino-grigio        ; /300Wx300H/barefoot-pino-grigio.jpg        ;
+                            ; barefoot-sauv-blanc         ; /300Wx300H/barefoot-sauv-blanc.jpg         ;
+                            ; carnivor-cabernet-sauvignon ; /300Wx300H/carnivor-cabernet-sauvignon.jpg ;
+                            ; dark-horse-cab              ; /300Wx300H/dark-horse-cab.jpg              ;
+                            ; dark-horse-merlot           ; /300Wx300H/dark-horse-merlot.jpg           ;
+                            ; estate-cab-sauv             ; /300Wx300H/estate-cab-sauv.jpg             ;
+                            ; jvineyards-pinot-noir       ; /300Wx300H/jvineyards-pinot-noir.jpg       ;
+                            ; la-marca-prosecco           ; /300Wx300H/la-marca-prosecco.jpg           ;
+                            ; papillon-red                ; /300Wx300H/papillon-red.jpg                ;
+                            ; ranch-zabaco                ; /300Wx300H/ranch-zabaco.jpg                ;
+                            ; reserve-chardonnay          ; /300Wx300H/reserve-chardonnay.jpg          ;
+                            ; talbot-kali-hart            ; /300Wx300H/talbot-kali-hart.jpg            ;
+                            ; william-hill-chardonnay     ; /300Wx300H/william-hill-chardonnay.jpg     ;
+                            ; la-marca-prosecco-rose      ; /300Wx300H/la-marca-prosecco-rose.jpg      ;
+                            ; dark-horse-rose             ; /300Wx300H/dark-horse-rose.jpg             ;
+
+INSERT_UPDATE Product; code[unique = true]; $picture                                   ; $thumbnail                                 ; $detail                                    ; $others                                    ; $normal                                    ; $thumbnails; $galleryImages              ; $catalogVersion
+                     ; AP-INF-750         ; /300Wx300H/apothic-inferno.jpg             ; /300Wx300H/apothic-inferno.jpg             ; /300Wx300H/apothic-inferno.jpg             ; /300Wx300H/apothic-inferno.jpg             ; /300Wx300H/apothic-inferno.jpg             ;            ; apothic-inferno             ;
+                     ; WN-CAB-EST-750     ; /300Wx300H/estate-cab-sauv.jpg             ; /300Wx300H/estate-cab-sauv.jpg             ; /300Wx300H/estate-cab-sauv.jpg             ; /300Wx300H/estate-cab-sauv.jpg             ; /300Wx300H/estate-cab-sauv.jpg             ;            ; estate-cab-sauv             ;
+                     ; WN-CHA-RES-750     ; /300Wx300H/reserve-chardonnay.jpg          ; /300Wx300H/reserve-chardonnay.jpg          ; /300Wx300H/reserve-chardonnay.jpg          ; /300Wx300H/reserve-chardonnay.jpg          ; /300Wx300H/reserve-chardonnay.jpg          ;            ; reserve-chardonnay          ;
+                     ; AP-RED-750         ; /300Wx300H/apothic-red-blend.jpg           ; /300Wx300H/apothic-red-blend.jpg           ; /300Wx300H/apothic-red-blend.jpg           ; /300Wx300H/apothic-red-blend.jpg           ; /300Wx300H/apothic-red-blend.jpg           ;            ; apothic-red-blend           ;
+                     ; LM-PRO-750         ; /300Wx300H/la-marca-prosecco.jpg           ; /300Wx300H/la-marca-prosecco.jpg           ; /300Wx300H/la-marca-prosecco.jpg           ; /300Wx300H/la-marca-prosecco.jpg           ; /300Wx300H/la-marca-prosecco.jpg           ;            ; la-marca-prosecco           ;
+                     ; DH-CAB-750         ; /300Wx300H/dark-horse-cab.jpg              ; /300Wx300H/dark-horse-cab.jpg              ; /300Wx300H/dark-horse-cab.jpg              ; /300Wx300H/dark-horse-cab.jpg              ; /300Wx300H/dark-horse-cab.jpg              ;            ; dark-horse-cab              ;
+                     ; BF-MOS-750         ; /300Wx300H/barefoot-moscato.jpg            ; /300Wx300H/barefoot-moscato.jpg            ; /300Wx300H/barefoot-moscato.jpg            ; /300Wx300H/barefoot-moscato.jpg            ; /300Wx300H/barefoot-moscato.jpg            ;            ; barefoot-moscato            ;
+                     ; CR-CAB-750         ; /300Wx300H/carnivor-cabernet-sauvignon.jpg ; /300Wx300H/carnivor-cabernet-sauvignon.jpg ; /300Wx300H/carnivor-cabernet-sauvignon.jpg ; /300Wx300H/carnivor-cabernet-sauvignon.jpg ; /300Wx300H/carnivor-cabernet-sauvignon.jpg ;            ; carnivor-cabernet-sauvignon ;
+                     ; BF-PGR-750         ; /300Wx300H/barefoot-pino-grigio.jpg        ; /300Wx300H/barefoot-pino-grigio.jpg        ; /300Wx300H/barefoot-pino-grigio.jpg        ; /300Wx300H/barefoot-pino-grigio.jpg        ; /300Wx300H/barefoot-pino-grigio.jpg        ;            ; barefoot-pino-grigio        ;
+                     ; WH-CHA-750         ; /300Wx300H/william-hill-chardonnay.jpg     ; /300Wx300H/william-hill-chardonnay.jpg     ; /300Wx300H/william-hill-chardonnay.jpg     ; /300Wx300H/william-hill-chardonnay.jpg     ; /300Wx300H/william-hill-chardonnay.jpg     ;            ; william-hill-chardonnay     ;
+                     ; LM-ROS-750         ; /300Wx300H/la-marca-prosecco-rose.jpg      ; /300Wx300H/la-marca-prosecco-rose.jpg      ; /300Wx300H/la-marca-prosecco-rose.jpg      ; /300Wx300H/la-marca-prosecco-rose.jpg      ; /300Wx300H/la-marca-prosecco-rose.jpg      ;            ; la-marca-prosecco-rose      ;
+                     ; DH-MER-750         ; /300Wx300H/dark-horse-merlot.jpg           ; /300Wx300H/dark-horse-merlot.jpg           ; /300Wx300H/dark-horse-merlot.jpg           ; /300Wx300H/dark-horse-merlot.jpg           ; /300Wx300H/dark-horse-merlot.jpg           ;            ; dark-horse-merlot           ;
+                     ; BF-CHA-750         ; /300Wx300H/barefoot-chardonnay.jpg         ; /300Wx300H/barefoot-chardonnay.jpg         ; /300Wx300H/barefoot-chardonnay.jpg         ; /300Wx300H/barefoot-chardonnay.jpg         ; /300Wx300H/barefoot-chardonnay.jpg         ;            ; barefoot-chardonnay         ;
+                     ; RA-ZIN-750         ; /300Wx300H/ranch-zabaco.jpg                ; /300Wx300H/ranch-zabaco.jpg                ; /300Wx300H/ranch-zabaco.jpg                ; /300Wx300H/ranch-zabaco.jpg                ; /300Wx300H/ranch-zabaco.jpg                ;            ; ranch-zabaco                ;
+                     ; JV-PIN-750         ; /300Wx300H/jvineyards-pinot-noir.jpg       ; /300Wx300H/jvineyards-pinot-noir.jpg       ; /300Wx300H/jvineyards-pinot-noir.jpg       ; /300Wx300H/jvineyards-pinot-noir.jpg       ; /300Wx300H/jvineyards-pinot-noir.jpg       ;            ; jvineyards-pinot-noir       ;
+                     ; TB-CHA-750         ; /300Wx300H/talbot-kali-hart.jpg            ; /300Wx300H/talbot-kali-hart.jpg            ; /300Wx300H/talbot-kali-hart.jpg            ; /300Wx300H/talbot-kali-hart.jpg            ; /300Wx300H/talbot-kali-hart.jpg            ;            ; talbot-kali-hart            ;
+                     ; AP-WHI-750         ; /300Wx300H/apothic-white.jpg               ; /300Wx300H/apothic-white.jpg               ; /300Wx300H/apothic-white.jpg               ; /300Wx300H/apothic-white.jpg               ; /300Wx300H/apothic-white.jpg               ;            ; apothic-white               ;
+                     ; BF-SBL-750         ; /300Wx300H/barefoot-sauv-blanc.jpg         ; /300Wx300H/barefoot-sauv-blanc.jpg         ; /300Wx300H/barefoot-sauv-blanc.jpg         ; /300Wx300H/barefoot-sauv-blanc.jpg         ; /300Wx300H/barefoot-sauv-blanc.jpg         ;            ; barefoot-sauv-blanc         ;
+                     ; DH-ROS-750         ; /300Wx300H/dark-horse-rose.jpg             ; /300Wx300H/dark-horse-rose.jpg             ; /300Wx300H/dark-horse-rose.jpg             ; /300Wx300H/dark-horse-rose.jpg             ; /300Wx300H/dark-horse-rose.jpg             ;            ; dark-horse-rose             ;
+                     ; OS-PAPI-750        ; /300Wx300H/papillon-red.jpg                ; /300Wx300H/papillon-red.jpg                ; /300Wx300H/papillon-red.jpg                ; /300Wx300H/papillon-red.jpg                ; /300Wx300H/papillon-red.jpg                ;            ; papillon-red                ;

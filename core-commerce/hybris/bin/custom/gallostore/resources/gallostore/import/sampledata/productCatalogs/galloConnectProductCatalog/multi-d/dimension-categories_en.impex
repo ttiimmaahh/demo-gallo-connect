@@ -1,0 +1,16 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+#CATEGORIES
+
+# Language
+$lang=en
+
+# Macros / Replacement Parameter definitions
+$productCatalog=galloConnectProductCatalog
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,default=$productCatalog:Staged]
+
+# Localized Category Names
+
+UPDATE Category;code[unique=true];name[lang=$lang];description[lang=$lang];$catalogVersion
+

@@ -1,0 +1,65 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+#
+# ImpEx for Powertools Site Email CMS Content
+#
+
+$contentCatalog=powertoolsContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$lang=en
+
+# CMS Image Components
+INSERT_UPDATE CMSImageComponent;$contentCV[unique=true];uid[unique=true];name
+                               ;;EmailBannerSaleNowOnImage;Email Banner Sale Now On Image
+                               ;;EmailBannerFreeDeliveryImage;Email Banner Free Delivery Image
+                               ;;EmailSiteLogoImage;Email Site Logo Image;
+
+#%import de.hybris.platform.powertoolsstore.setup.PowertoolsStoreSystemSetup
+#%impex.enableCodeExecution(true)
+#%impex.enableExternalSyntaxParsing(true)
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-customer-registration-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-delivery-sent-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-forgotten-password-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-not-picked-up-consignmen-canceled-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-order-approval-rejection-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-order-cancelled-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-order-collection-reminder-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-order-confirmation-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-order-move-to-cs-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-order-partially-canceled-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-order-partially-refunded-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-order-pending-approval-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-order-refund-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-quote-buyer-cancellation-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-quote-buyer-submission-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-quote-expired-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-quote-to-expire-soon-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-ready-for-pickup-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-replenishment-order-confirmation-email-body.impex"), "utf-8", 0, 0);;
+#%impex.includeExternalData(PowertoolsStoreSystemSetup.class.getResourceAsStream("/powertoolsstore/import/sampledata/contentCatalogs/powertoolsContentCatalog/email-paragraphs/email-replenishment-order-placed-email-body.impex"), "utf-8", 0, 0);;
+
+# Content Slots
+UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(uid,$contentCV)
+                  ;;CustomerRegistrationEmailTopSlot;EmailBannerSaleNowOnImage,CustomerRegistrationEmailBody
+                  ;;DeliverySentEmailTopSlot;EmailBannerSaleNowOnImage,DeliverySentEmailBody
+                  ;;ForgottenPasswordEmailTopSlot;EmailBannerSaleNowOnImage,ForgottenPasswordEmailBody
+                  ;;NotPickedUpConsignmentCanceledEmailTopSlot;EmailBannerSaleNowOnImage,NotPickedUpConsignmentCanceledEmailBody
+                  ;;OrderCancelledEmailTopSlot;EmailBannerSaleNowOnImage,OrderCancelledEmailBody
+                  ;;OrderCollectionReminderEmailTopSlot;EmailBannerSaleNowOnImage,OrderCollectionReminderEmailBody
+                  ;;OrderConfirmationEmailTopSlot;EmailBannerSaleNowOnImage,OrderConfirmationEmailBody
+                  ;;OrderMoveToCsEmailTopSlot;EmailBannerSaleNowOnImage,OrderMoveToCsEmailBody
+                  ;;OrderPartiallyCanceledEmailTopSlot;EmailBannerSaleNowOnImage,OrderPartiallyCanceledEmailBody
+                  ;;OrderPartiallyRefundedEmailTopSlot;EmailBannerSaleNowOnImage,OrderPartiallyRefundedEmailBody
+                  ;;OrderRefundEmailTopSlot;EmailBannerSaleNowOnImage,OrderRefundEmailBody
+                  ;;OrderPendingApprovalEmailTopSlot;EmailBannerSaleNowOnImage
+                  ;;OrderApprovalRejectionEmailTopSlot;EmailBannerSaleNowOnImage
+                  ;;QuoteBuyerCancellationEmailTopSlot;EmailBannerSaleNowOnImage,QuoteBuyerCancellationEmailBody
+                  ;;QuoteBuyerSubmissionEmailTopSlot;EmailBannerSaleNowOnImage,QuoteBuyerSubmissionEmailBody
+                  ;;QuoteExpiredEmailTopSlot;EmailBannerSaleNowOnImage,QuoteExpiredEmailBody
+                  ;;QuoteToExpireSoonEmailTopSlot;EmailBannerSaleNowOnImage,QuoteToExpireSoonEmailBody
+                  ;;ReadyForPickupEmailTopSlot;EmailBannerSaleNowOnImage,ReadyForPickupEmailBody
+                  ;;ReplenishmentOrderConfirmationEmailTopSlot;EmailBannerSaleNowOnImage
+                  ;;ReplenishmentOrderPlacedEmailTopSlot;EmailBannerSaleNowOnImage
+                  ;;EmailTopSlot;EmailBannerSaleNowOnImage
+                  ;;EmailBottomSlot;EmailBannerFreeDeliveryImage

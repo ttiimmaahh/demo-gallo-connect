@@ -1,0 +1,38 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+#PRODUCTS
+
+# Macros / Replacement Parameter definitions
+$productCatalog=galloConnectProductCatalog
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,default=$productCatalog:Staged]
+$supercategories=supercategories(code, $catalogVersion)
+$baseProduct=baseProduct(code,$catalogVersion)
+$approved=approvalstatus(code)[default='approved']
+
+# Language
+$lang=en
+
+# Insert Variant Category
+INSERT_UPDATE VariantCategory      ; code[unique=true] ; name       ; $supercategories ; hasImage ; $catalogVersion ; allowedPrincipals(uid)[default='customergroup']
+
+
+
+#Insert Variant Value Category
+INSERT_UPDATE VariantValueCategory ; code[unique=true] ; name       ; $supercategories ; sequence ; $catalogVersion ; allowedPrincipals(uid)[default='customergroup']
+
+
+# Insert Products
+INSERT_UPDATE Product ; code[unique=true] ; $supercategories                ; manufacturerName                                     ; variantType(code)     ; unit(code)[default=pieces] ; $catalogVersion
+
+                      
+
+
+#Update product description
+UPDATE Product                     ; code[unique=true] ; name[lang=$lang]                                     ; description[lang=$lang]                              ; summary 											   ; $approved             ; $catalogVersion
+
+
+#Updating product information
+INSERT_UPDATE GenericVariantProduct ; code[unique=true] ; $baseProduct ;$catalogVersion ; name                                     								    ; summary                                                                   ; ean          ; $supercategories               ; $approved ; description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+                                    

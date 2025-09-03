@@ -1,0 +1,15 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# Add Document type
+
+#% if: de.hybris.platform.servicelayer.i18n.util.LanguageUtils.isLanguagePresent("en")
+
+INSERT_UPDATE B2BDocumentType;code[unique=true];name[lang=en];includeInOpenBalance;displayInAllList
+;PURCHASE_ORDER;Purchase Order;true;true
+;INVOICE;Invoice;true;true
+;CREDIT_NOTE;Credit Note;true;true
+;DEBIT_NOTE;Debit Note;true;true
+;STATEMENT;Statement;false;true
+
+#% endif:

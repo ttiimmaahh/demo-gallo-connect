@@ -1,0 +1,236 @@
+.hero-banner-container {
+  position: relative;
+  width: 100%;
+  height: 60vh; // Adjust height as needed
+  min-height: 400px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .hero-image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+
+      ::ng-deep img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    // Add a subtle overlay for better text readability
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.2) 50%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
+      z-index: 2;
+    }
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2rem;
+    text-align: center;
+
+    .hero-content {
+      max-width: 600px;
+      width: 100%;
+      color: white;
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        
+        @media (max-width: 768px) {
+          font-size: 2.5rem;
+        }
+        
+        @media (max-width: 480px) {
+          font-size: 2rem;
+        }
+      }
+
+      .hero-content-text {
+        font-size: 1.25rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        
+        @media (max-width: 768px) {
+          font-size: 1.1rem;
+        }
+        
+        @media (max-width: 480px) {
+          font-size: 1rem;
+        }
+
+        // Style any HTML content that might be in the CMS content
+        ::ng-deep {
+          p {
+            margin-bottom: 1rem;
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+          
+          strong {
+            font-weight: 600;
+          }
+        }
+      }
+
+      .hero-actions {
+        .hero-cta-button {
+          display: inline-block;
+          padding: 0.75rem 1.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border-radius: 25px;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          
+          // Primary button styling - can be customized to match brand colors
+          background: linear-gradient(45deg, var(--cx-color-primary, #1976d2), var(--cx-color-secondary, #42a5f5));
+          border: 2px solid transparent;
+          color: white;
+
+          &:hover,
+          &:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, var(--cx-color-secondary, #42a5f5), var(--cx-color-primary, #1976d2));
+            color: white;
+            text-decoration: none;
+          }
+
+          &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+          }
+
+          @media (max-width: 480px) {
+            padding: 0.625rem 1.25rem;
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Regular banner styles (for non-hero banners)
+.regular-banner {
+  display: block;
+  
+  .cx-banner {
+    display: block;
+    width: 100%;
+    
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+  
+  .cx-banner-text {
+    padding: 1rem;
+    text-align: center;
+    
+    h2 {
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+    
+    a {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--cx-color-primary, #1976d2);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      
+      &:hover {
+        background-color: var(--cx-color-secondary, #42a5f5);
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .hero-banner-container {
+    .hero-image-wrapper::after {
+      background: rgba(0, 0, 0, 0.7);
+    }
+    
+    .hero-overlay .hero-content {
+      .hero-title,
+      .hero-content-text {
+        text-shadow: 2px 2px 0 black;
+      }
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .hero-banner-container .hero-actions .hero-cta-button {
+    transition: none;
+    
+    &:hover,
+    &:focus {
+      transform: none;
+    }
+  }
+}
+
+// Dark mode support (if using CSS custom properties)
+@media (prefers-color-scheme: dark) {
+  .hero-banner-container {
+    .hero-image-wrapper::after {
+      background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.6) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+    }
+  }
+}

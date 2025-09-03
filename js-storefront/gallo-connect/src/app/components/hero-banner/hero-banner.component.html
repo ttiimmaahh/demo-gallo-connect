@@ -1,0 +1,64 @@
+<ng-container *ngIf="data$ | async as data">
+  <!-- Hero Banner with Overlay (only for detected hero banners) -->
+  <div class="hero-banner-container" *ngIf="isHeroBanner">
+    <!-- Background Image -->
+    <div class="hero-image-wrapper">
+      <img [src]="getMediaUrl(data.media)" [alt]="data.headline || ''" class="hero-image">
+    </div>
+
+    <!-- Overlay Content -->
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <!-- Main Headline -->
+        <h1 class="hero-title" *ngIf="data.headline">
+          {{ data.headline }}
+        </h1>
+        
+        <!-- Fallback headline for testing -->
+        <h1 class="hero-title" *ngIf="!data.headline">
+          Welcome to Gallo Connect
+        </h1>
+
+        <!-- Subheadline/Content -->
+        <div class="hero-content-text" *ngIf="data.content" [innerHTML]="data.content">
+        </div>
+        
+        <!-- Fallback content for testing -->
+        <div class="hero-content-text" *ngIf="!data.content">
+          <div>Discover premium wines and exceptional experiences.</div>
+        </div>
+
+        <!-- Call-to-Action Button -->
+        <div class="hero-actions" *ngIf="data.urlLink">
+          <a [routerLink]="data.urlLink" class="hero-cta-button"
+            [attr.aria-label]="data.headline || 'Learn more'" (click)="onButtonClick()">
+            {{ data.headline || 'Learn More' }}
+          </a>
+        </div>
+        
+        <!-- Fallback button for testing -->
+        <!-- <div class="hero-actions" *ngIf="!data.urlLink">
+          <a href="#" class="hero-cta-button"
+            aria-label="Learn more" (click)="onButtonClick()">
+            Learn More
+          </a>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Regular Banner (for non-hero banners - render as standard Spartacus banner) -->
+  <div class="regular-banner" *ngIf="!isHeroBanner">
+    <!-- Standard Spartacus Banner Layout -->
+    <div class="cx-banner" *ngIf="data.media">
+      <img [src]="getMediaUrl(data.media)" [alt]="data.headline || ''" />
+    </div>
+    
+    <!-- Text-only banner for banners without media -->
+    <div class="cx-banner-text" *ngIf="!data.media">
+      <h2 *ngIf="data.headline">{{ data.headline }}</h2>
+      <div *ngIf="data.content" [innerHTML]="data.content"></div>
+      <a *ngIf="data.urlLink" [routerLink]="data.urlLink">{{ data.headline || 'Learn More' }}</a>
+    </div>
+  </div>
+</ng-container>

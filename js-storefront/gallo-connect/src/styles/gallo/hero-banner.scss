@@ -1,0 +1,68 @@
+// Hero Banner Component Styles
+// This file contains styles specific to the custom hero banner component
+
+// Hero Banner specific styling
+.hero-banner-container {
+  // Ensure proper positioning within Spartacus layout
+  margin: 0;
+}
+
+// Override any default banner styles from Spartacus
+cx-banner {
+  display: block;
+  width: 100%;
+  
+  .hero-banner-container {
+    // Ensure the hero banner takes full width when used in cx-banner
+    width: 100%;
+  }
+}
+
+// Responsive breakpoint adjustments using standard media queries
+@media (max-width: 575.98px) { // xs breakpoint
+  .hero-banner-container {
+    height: 50vh;
+    min-height: 300px;
+    
+    .hero-overlay .hero-content {
+      padding: 0 1rem;
+      
+      .hero-title {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+      
+      .hero-content-text {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) { // sm breakpoint
+  .hero-banner-container {
+    height: 55vh;
+    min-height: 350px;
+    
+    .hero-overlay .hero-content {
+      .hero-title {
+        font-size: 2.25rem;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) { // md breakpoint and up
+  .hero-banner-container {
+    height: 60vh;
+    min-height: 400px;
+  }
+}
+
+// Ensure compatibility with Spartacus theme variables
+:root {
+  --hero-overlay-bg: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.1) 100%);
+  --hero-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  --hero-button-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}

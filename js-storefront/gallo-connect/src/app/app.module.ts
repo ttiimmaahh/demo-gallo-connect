@@ -9,7 +9,9 @@ import { AppRoutingModule } from "@spartacus/storefront";
 import { MarkdownModule } from 'ngx-markdown';
 import { AppComponent } from './app.component';
 import { SpartacusModule } from './spartacus/spartacus.module';
+import { SmartEditModule } from '@spartacus/smartedit';
 import { ChatbotModule } from './components/chatbot/chatbot.module';
+import { HeroBannerModule } from './components/hero-banner/hero-banner.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { ChatbotModule } from './components/chatbot/chatbot.module';
       sanitize: SecurityContext.NONE // We trust the LLM content, enhanced styling via CSS
     }),
     SpartacusModule,
-    ChatbotModule
+    SmartEditModule,
+    ChatbotModule,
+    HeroBannerModule
   ],
   providers: [provideHttpClient(withFetch(), withInterceptorsFromDi())],
   bootstrap: [AppComponent]

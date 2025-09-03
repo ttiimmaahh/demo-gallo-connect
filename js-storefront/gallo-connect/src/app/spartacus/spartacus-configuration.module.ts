@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { translationChunksConfig, translationsEn } from "@spartacus/assets";
-import { FeaturesConfig, I18nConfig, OccConfig, provideConfig, provideConfigFactory, SiteContextConfig } from "@spartacus/core";
+import { CmsConfig, FeaturesConfig, I18nConfig, OccConfig, provideConfig, provideConfigFactory, SiteContextConfig } from "@spartacus/core";
 import { defaultB2bOccConfig } from "@spartacus/setup";
 import { defaultCmsContentProviders, layoutConfigFactory, mediaConfig } from "@spartacus/storefront";
+import { HeroBannerComponent } from '../components/hero-banner/hero-banner.component';
+import { CmsBannerComponent } from '@spartacus/core';
 
 @NgModule({
   declarations: [],
@@ -18,7 +20,8 @@ import { defaultCmsContentProviders, layoutConfigFactory, mediaConfig } from "@s
   }), provideConfig(<SiteContextConfig>{
     context: {
       urlParameters: ['baseSite', 'language', 'currency'],
-      baseSite: ['powertools-spa'],
+      // baseSite: ['powertools-spa'],
+      baseSite: ['galloConnect'],
       currency: ['USD'],
       language: ['en']
     },
@@ -32,6 +35,21 @@ import { defaultCmsContentProviders, layoutConfigFactory, mediaConfig } from "@s
     features: {
       level: '2211.43'
     }
-  }), provideConfig(defaultB2bOccConfig)]
+  }), provideConfig(defaultB2bOccConfig),
+  provideConfig(<CmsConfig>{
+    cmsComponents: {
+      // Map all common banner component types to our custom hero banner
+      SimpleResponsiveBannerComponent: {
+        component: HeroBannerComponent,
+      },
+    },
+  })
+  ]
 })
 export class SpartacusConfigurationModule { }
+
+// (working)
+// https://localhost:9002/medias/GalloConnect-1400x480-BigSplash-EN-01-1400W.jpg?context=bWFzdGVyfGltYWdlc3wyNzEzMTZ8aW1hZ2UvanBlZ3xhVzFoWjJWekwyZ3pOeTlvTnpVdk9EYzVOemt4T0RBd016SXpNQzVxY0djfDVjYWQ4YWI1M2I5ZDJlOGE2NTI2OWNkNTFkYTliZTM5ODMxMzZkMTUwOGY5MWUxNzZlYTQ2ZmE2NTJkMTc3OGM
+
+// (not working)
+// http://localhost:4200/medias/GalloConnect-1400x480-BigSplash-EN-01-1400W.jpg?context=bWFzdGVyfGltYWdlc3wyNzEzMTZ8aW1hZ2UvanBlZ3xhVzFoWjJWekwyZ3pOeTlvTnpVdk9EYzVOemt4T0RBd016SXpNQzVxY0djfDVjYWQ4YWI1M2I5ZDJlOGE2NTI2OWNkNTFkYTliZTM5ODMxMzZkMTUwOGY5MWUxNzZlYTQ2ZmE2NTJkMTc3OGM

@@ -1,0 +1,39 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# ImpEx for Importing Products into Gallo Connect Store
+
+# Macros / Replacement Parameter definitions
+$productCatalog = galloConnectProductCatalog
+$productCatalogName = Gallo Connect Product Catalog
+$catalogVersion = catalogversion(catalog(id[default = $productCatalog]), version[default = 'Staged'])[unique = true, default = $productCatalog:Staged]
+$supercategories = supercategories(code, $catalogVersion)
+$baseProduct = baseProduct(code, $catalogVersion)
+$approved = approvalstatus(code)[default = 'check']
+
+# Language
+$lang = en
+
+# Insert Products
+INSERT_UPDATE Product; code[unique = true]; name[lang = en]                       ; description[lang = en]                                                                                  ; unit(code); supercategories(code); $catalogVersion; approvalStatus(code); picture(code, catalogVersion(catalog(id), version))
+                     ; WN-CAB-EST-750     ; "Estate Cabernet Sauvignon 750ml"     ; "Our flagship estate Cabernet Sauvignon, a bold red with notes of dark cherry and vanilla."             ; bottle    ; cabernet-sauvignon   ;                ; approved            ;
+                     ; WN-CHA-RES-750     ; "Reserve Chardonnay 750ml"            ; "A crisp, oaked Chardonnay with hints of apple and butterscotch."                                       ; bottle    ; chardonnay           ;                ; approved            ;
+                     ; AP-RED-750         ; "Apothic Red Blend 750ml"             ; "A masterful blend of Zinfandel, Syrah, Merlot and Cabernet Sauvignon. Bold, with dark fruit flavors."  ; bottle    ; red-blend            ;                ; approved            ;
+                     ; LM-PRO-750         ; "La Marca Prosecco 750ml"             ; "Delicate, golden straw color with lively bubbles. Notes of fresh-picked citrus and honeysuckle."       ; bottle    ; prosecco             ;                ; approved            ;
+                     ; DH-CAB-750         ; "Dark Horse Cabernet Sauvignon 750ml" ; "Bold and layered with notes of blackberry, black cherry, and a hint of dark chocolate."                ; bottle    ; cabernet-sauvignon   ;                ; approved            ;
+                     ; BF-MOS-750         ; "Barefoot Moscato 750ml"              ; "A sweet wine with delicious notes of juicy peach and apricot. Hints of lemon and orange citrus."       ; bottle    ; moscato              ;                ; approved            ;
+                     ; CR-CAB-750         ; "Carnivor Cabernet Sauvignon 750ml"   ; "A big, bold wine with a plush, velvety mouthfeel. Notes of dark cherry, blackberry, and mocha."        ; bottle    ; cabernet-sauvignon   ;                ; approved            ;
+                     ; BF-PGR-750         ; "Barefoot Pinot Grigio 750ml"         ; "A light-bodied wine with a bright finish. Tart green apple and floral blossoms with a citrus finish."  ; bottle    ; pinot-grigio         ;                ; approved            ;
+                     ; WH-CHA-750         ; "William Hill Chardonnay 750ml"       ; "Aromas of ripe tree fruit, vanilla and a touch of butterscotch. Creamy mouthfeel and a long finish."   ; bottle    ; chardonnay           ;                ; approved            ;
+                     ; AP-INF-750         ; "Apothic Inferno Red Blend 750ml"     ; "A red blend aged in whiskey barrels for 60 days, featuring notes of red and dark fruit with maple."    ; bottle    ; red-blend            ;                ; approved            ;
+                     ; LM-ROS-750         ; "La Marca Prosecco Rosé 750ml"        ; "Crisp and refreshing with notes of fresh strawberry, cherry, and a hint of floral."                    ; bottle    ; rose-wines,prosecco  ;                ; approved            ;
+                     ; DH-MER-750         ; "Dark Horse Merlot 750ml"             ; "A rich, full-bodied Merlot with notes of dark cherry, toasted oak, and a hint of mocha."               ; bottle    ; red-wines            ;                ; approved            ;
+                     ; BF-CHA-750         ; "Barefoot Chardonnay 750ml"           ; "A smooth and buttery Chardonnay with hints of apple, vanilla, and a touch of oak."                     ; bottle    ; chardonnay           ;                ; approved            ;
+                     ; RA-ZIN-750         ; "Rancho Zabaco Zinfandel 750ml"       ; "A bold and spicy Zinfandel with flavors of blackberry, pepper, and a hint of vanilla."                 ; bottle    ; zinfandel            ;                ; approved            ;
+                     ; JV-PIN-750         ; "J Vineyards Pinot Noir 750ml"        ; "A complex Pinot Noir with notes of cherry, raspberry, and a touch of earthiness. Silky finish."        ; bottle    ; pinot-noir           ;                ; approved            ;
+                     ; TB-CHA-750         ; "Talbott Kali Hart Chardonnay 750ml"  ; "A rich and creamy Chardonnay with tropical fruit notes, hints of butter, and a bright, acidic finish." ; bottle    ; chardonnay           ;                ; approved            ;
+                     ; AP-WHI-750         ; "Apothic White Blend 750ml"           ; "A blend of Chardonnay, Riesling, and Moscato with notes of peach, apricot, and a floral finish."       ; bottle    ; white-wines          ;                ; approved            ;
+                     ; BF-SBL-750         ; "Barefoot Sauvignon Blanc 750ml"      ; "A crisp and refreshing white wine with notes of melon, pear, and a zesty citrus finish."               ; bottle    ; sauvignon-blanc      ;                ; approved            ;
+                     ; DH-ROS-750         ; "Dark Horse Rosé 750ml"               ; "A dry and crisp Rosé with flavors of fresh red fruit and a hint of minerality."                        ; bottle    ; rose-wines           ;                ; approved            ;
+                     ; OS-PAPI-750        ; "Orin Swift Papillon Red Blend 750ml" ; "A complex Bordeaux-style blend. Full-bodied with dark fruit, truffle, and a lengthy, elegant finish."  ; bottle    ; red-blend            ;                ; approved            ;
+

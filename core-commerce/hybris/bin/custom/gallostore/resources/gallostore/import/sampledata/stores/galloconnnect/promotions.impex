@@ -1,0 +1,145 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# ImpEx for Promotions for Gallo Connect Store
+#% impex.setLocale( Locale.GERMAN ); 
+
+$defaultPromoGrp=galloConnectPromoGrp
+$favCustomers=favoriteCustomers
+$bigSpenders=bigSpenders
+$delvieryMode=std-gross
+$regulargroup=regulargroup
+
+$productCatalog=galloConnectProductCatalog
+$catalogVersion=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$productCatalog]),CatalogVersion.version[default=Online])[default=$productCatalog:Online]
+
+INSERT PromotionPriceRow;&tresholdId;Currency(isocode);price
+
+INSERT PromotionPriceRow;&priceId;Currency(isocode);price
+
+INSERT_UPDATE OrderThresholdDiscountPromotion;PromotionGroup(Identifier[default=$defaultPromoGrp]);enabled[default=true,unique=true];code[unique=true];title;description;messageFired[lang=en];messageFired[lang=de];messageFired[lang=ja];priority;thresholdTotals(&tresholdId);discountPrices(&priceId)
+
+INSERT_UPDATE PromotionUserRestriction;positive;promotion(code)[unique=true];users(uid)
+
+INSERT PromotionPriceRow;&tresholdId;Currency(isocode);price
+
+INSERT PromotionPriceRow;&priceId;Currency(isocode);price
+;40;USD;40
+
+INSERT PromotionPriceRow;&bundlePriceId;Currency(isocode);price
+;255;USD;255
+
+INSERT PromotionPriceRow;&thresholdPriceId;Currency(isocode);price
+;500;USD;500
+
+#3% off orders over $500
+INSERT_UPDATE OrderThresholdDiscountPercentagePromotion;PromotionGroup(Identifier[default=$defaultPromoGrp]);enabled[default=true][unique=true];code[unique=true];title;description;messageCouldHaveFired[lang=en];priority;thresholdTotals(&thresholdPriceId);percentageDiscount
+;;;3PercentDiscountOver500;3% off orders over $500;3% off orders over $500;3% off orders over $500;500;500;3
+
+INSERT_UPDATE ProductMultiBuyPromotion;PromotionGroup(Identifier[default=$defaultPromoGrp]);enabled[default=true][unique=true];code[unique=true];title;description;priority;categories(code,$catalogVersion);qualifyingCount;bundlePrices(&priceId)
+
+INSERT_UPDATE AcceleratorProductBOGOFPromotion;PromotionGroup(Identifier[default=$defaultPromoGrp]);enabled[default=true][unique=true];code[unique=true];title;description;priority;categories(code,$catalogVersion);qualifyingCount;freeCount
+
+INSERT PromotionPriceRow;&priceId;Currency(isocode);price
+
+INSERT_UPDATE ProductPerfectPartnerPromotion;PromotionGroup(Identifier[default=$defaultPromoGrp]);enabled[default=true][unique=true];code[unique=true];title;description;priority;products(code,$catalogVersion);partnerProducts(code,$catalogVersion);partnerPrices(&priceId)
+
+INSERT PromotionPriceRow;&priceId;Currency(isocode);price
+
+INSERT_UPDATE ProductBundlePromotion;PromotionGroup(Identifier[default=$defaultPromoGrp]);enabled[default=true,unique=true];code[unique=true];title;description;priority;products(code,$catalogVersion);bundlePrices(&priceId)
+
+
+# Vouchers (legacy)
+INSERT_UPDATE PromotionVoucher;code[unique=true];currency(isocode);description;freeShipping;priority;redemptionQuantityLimitPerUser;redemptionQuantityLimit;value;voucherCode
+;000;USD;Get $10 discount on the cart;false;25;10;100;10;SUMMER69
+;001;;Get 10% discount on the cart;false;25;10;100;10;WINTER16
+
+### Sample promotions of Promotion-Engine ###
+# RULE GROUPS
+INSERT_UPDATE RuleGroup;code[unique=true]
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""couponservices"";
+if(!extensionNames.contains(extensionName))
+{
+    templateId = line.get(1);
+    LOG.info(""RuleGroup [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+    line.clear();
+}
+"
+                       ;orderPromotionRuleGroup
+                       ;productPromotionRuleGroup
+                       ;customerPromotionRuleGroup
+                       ;couponPromotionRuleGroup
+
+# COUPON SAMPLE DATA
+INSERT_UPDATE CodeGenerationConfiguration;name[unique=true];codeSeparator;
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""couponservices"";
+if(!extensionNames.contains(extensionName))
+{
+    templateId = line.get(1);
+    LOG.info(""CodeGenerationConfiguration [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+    line.clear();
+}
+"
+                                         ;default-configuration;-;
+
+INSERT_UPDATE SingleCodeCoupon;couponId(id)[unique=true];maxRedemptionsPerCustomer;maxTotalRedemptions
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""couponservices"";
+if(!extensionNames.contains(extensionName))
+{
+    templateId = line.get(1);
+    LOG.info(""SingleCodeCoupon [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+    line.clear();
+}
+"
+                              ;SUMMER69;1;10;
+                              ;FALL16;1;100;
+                              ;CHRISTMAS16;3;100;
+                              ;WINTER16;2;15;
+
+INSERT_UPDATE MultiCodeCoupon;couponId(id)[unique=true];codeGenerationConfiguration(name)
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""couponservices"";
+if(!extensionNames.contains(extensionName))
+{
+    templateId = line.get(1);
+    LOG.info(""MultiCodeCoupon [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+    line.clear();
+}
+"
+                             ;PROMO16;default-configuration
+### END Sample promotions of Promotion-Engine ###

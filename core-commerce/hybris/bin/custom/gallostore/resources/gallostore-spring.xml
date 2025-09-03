@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2021 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+<!--    <alias alias="b2bAcceleratorCoreSystemSetup" name="gallostoreSystemSetup" />-->
+    <bean id="gallostoreSystemSetup" class="com.gallo.store.setup.GallostoreSystemSetup" parent="abstractCoreSystemSetup">
+        <property name="coreDataImportService" ref="coreDataImportService" />
+        <property name="galloConnectSampleDataImportService" ref="galloConnectSampleDataImportService" />
+    </bean>
+
+    <bean id="galloConnectSampleDataImportService" class="com.gallo.store.service.dataimport.impl.GalloConnectSampleDataImportService"
+          parent="sampleDataImportService">
+    </bean>
+
+    <!-- Solr field value providers TEMPORARY FOR NOW SO DO NOT NEED TO DEPEND ON yb2bacceleratorcore -->
+
+    <bean id="galloConnectCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+        <property name="categorySource" ref="galloConnectCategorySource"/>
+    </bean>
+    <bean id="galloConnectBrandCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+        <property name="categorySource" ref="galloConnectBrandCategorySource"/>
+    </bean>
+    <bean id="galloConnectVariantCategoryCodeValueProvider" parent="abstractCategoryCodeValueProvider">
+        <property name="categorySource" ref="galloConnectVariantCategorySource"/>
+    </bean>
+
+
+    <bean id="galloConnectCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+        <property name="categorySource" ref="galloConnectCategorySource"/>
+    </bean>
+
+    <bean id="galloConnectBrandCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+        <property name="categorySource" ref="galloConnectBrandCategorySource"/>
+    </bean>
+
+    <bean id="galloConnectCategorySource" parent="defaultCategorySource">
+        <property name="rootCategory" value="1"/> <!-- '1' is the root icecat category -->
+    </bean>
+    <bean id="galloConnectVariantCategorySource" parent="variantCategorySource"/>
+
+    <bean id="galloConnectBrandCategorySource" parent="defaultCategorySource">
+        <property name="rootCategory" value="brands"/> <!-- 'brands' is the root of the brands hierarchy -->
+    </bean>
+
+    <bean id="gallostoreService" class="com.gallo.store.service.impl.DefaultGallostoreService">
+        <!-- setter injection example -->
+        <property name="modelService" ref="modelService"/>
+        <property name="mediaService" ref="mediaService"/>
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
+			
+</beans>

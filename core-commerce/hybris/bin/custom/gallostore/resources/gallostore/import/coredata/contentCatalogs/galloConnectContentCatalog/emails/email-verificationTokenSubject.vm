@@ -1,0 +1,2 @@
+## messageSource=classpath:/powertoolsstore/messages/email-verificationToken_$lang.properties
+${ctx.messages.getMessage(${ctx.purpose} + '.emailSubject', ${ctx.baseSite.name})}

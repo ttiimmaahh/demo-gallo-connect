@@ -10,12 +10,38 @@ cx-category-navigation {
 
 header {
     background: linear-gradient(to top, #000000 67px, #ffffff 0) !important;
+    .SiteLinks {
+      cx-link {
+        a {
+          color: $body-color !important;
+        }
+      }
+    }
 }
 
 // Custom styles for the footer
 cx-footer-navigation {
   cx-navigation-ui {
     background-color: $gallo-dark !important;
-    color: #000000 !important;
+    color: $body-color !important;
   }
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+  background-color: $gallo-border-focus !important;
+  border: $gallo-border-focus !important;
+}
+
+header .SiteLogo {
+  width: 140px !important;
+}
+
+.btn-tertiary {
+  color: $body-color !important;
+}
+
+cx-page-layout.LandingPage2Template cx-page-slot.Section1 {
+  max-width: 100% !important;
+  margin: 0 !important;
+  margin-top: 0 !important;
 }

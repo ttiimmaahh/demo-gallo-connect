@@ -1,0 +1,280 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# Import essential data for the Accelerator
+#
+# Includes:
+# * Languages
+# * Currencies
+# * Titles
+# * Vendors
+# * Warehouses
+# * Supported Credit/Debit cards
+# * User Groups
+# * DistanceUnits for Storelocator
+# * MediaFolders
+# * MediaFormats
+# * Tax & Tax Groups
+# * Jobs
+
+# Languages
+INSERT_UPDATE Language; isocode[unique = true]; fallbackLanguages(isocode); active[default = true]
+                      ; en                    ;                           ; ;
+
+
+# Currencies
+INSERT_UPDATE Currency; isocode[unique = true]; conversion; digits; symbol
+                      ; EUR                   ; 1         ; 2     ; €
+                      ; USD                   ; 1,4       ; 2     ; $
+                      ; CAD                   ; 1,4       ; 2     ; C$
+
+# Vendor
+INSERT_UPDATE Vendor; code[unique = true]; name
+                    ; default            ; Default Vendor
+                    ; gallo              ; Gallo
+
+INSERT Warehouse; code[unique = true]; name              ; vendor(code)[default = default, forceWrite = true]; default[default = true, forceWrite = true]
+"#% beforeEach:
+import de.hybris.platform.core.Registry;
+import de.hybris.platform.ordersplitting.model.WarehouseModel;
+String warehouseCode = line.get(Integer.valueOf(1));
+WarehouseModel warehouse;
+try
+{
+    warehouse = Registry.getApplicationContext().getBean(""warehouseService"").getWarehouseForCode(warehouseCode);
+}
+catch (Exception e)
+{
+    warehouse = null;
+}
+if (warehouse != null)
+{
+    line.clear();
+}"
+                ; default            ; Default Warehouse ;
+                ; pw_warehouse_s     ;                   ; gallo
+                ; pw_warehouse_e     ;                   ; gallo
+                ; pw_warehouse_w     ;                   ; gallo
+                ; pw_warehouse_n     ;                   ; gallo
+
+# Disable preview for email pages
+UPDATE CMSPageType; code[unique = true]; previewDisabled
+                  ; EmailPage          ; true
+
+# Titles
+INSERT_UPDATE Title; code[unique = true]
+                   ; mr
+                   ; mrs
+                   ; miss
+                   ; ms
+                   ; dr
+                   ; rev
+
+# Media Folders
+INSERT_UPDATE MediaFolder; qualifier[unique = true]; path[unique = true]
+                         ; images                  ; images
+                         ; email-body              ; email-body
+                         ; email-attachments       ; email-attachments
+                         ; documents               ; documents
+
+# Media formats
+INSERT_UPDATE MediaFormat; qualifier[unique = true]
+                         ; 1200Wx1200H
+                         ; 515Wx515H
+                         ; 365Wx246H
+                         ; 300Wx300H
+                         ; 96Wx96H
+                         ; 65Wx65H
+                         ; 30Wx30H
+
+# Tax & Tax Groups
+INSERT_UPDATE UserTaxGroup; code[unique = true]
+                          ; us-taxes
+                          ; ca-taxes
+
+INSERT_UPDATE ProductTaxGroup; code[unique = true]
+                             ; us-sales-tax-full
+                             ; ca-sales-tax-full
+
+INSERT_UPDATE Tax; code[unique = true]; value; currency(isocode)
+                 ; us-sales-tax-full  ; 0
+                 ; ca-sales-tax-full  ; 0
+
+INSERT_UPDATE ServicelayerJob; code[unique = true]; springId[unique = true]
+                             ; cartRemovalJob     ; cartRemovalJob
+                             ; siteMapMediaJob    ; siteMapMediaJob
+
+# Deactivate Frontend Restriction on category by default for perfomance purposes
+UPDATE SearchRestriction; code[unique = true]; active[default = false]
+                        ; Frontend_RestrictedCategory
+
+#promotion-preview-module
+INSERT_UPDATE DroolsKIEModule; name[unique = true]       ; mvnGroupId   ; mvnArtifactId      ; mvnVersion; ruleType(code); active; version;
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""promotionengineservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""DroolsKIEModule [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+                             ; promotions-preview-module ; hybris-rules ; promotions-preview ; 1.0.0     ; PROMOTION     ; true  ; -1     ;
+
+INSERT_UPDATE DroolsKIEModule; name[unique = true]       ; allowedTargets(name)
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""promotionengineservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""DroolsKIEModule [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+                             ; promotions-preview-module ; promotions-module
+
+INSERT_UPDATE DroolsKIEBase; name[unique = true]     ; kieModule(name)[unique = true]; equalityBehavior(code); eventProcessingMode(code)
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""promotionengineservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""DroolsKIEBase [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+                           ; promotions-preview-base ; promotions-preview-module     ; EQUALITY              ; STREAM
+
+INSERT_UPDATE DroolsKIESession; name[unique = true]        ; kieBase(name)[unique = true]; sessionType(code)
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""promotionengineservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""DroolsKIESession [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+                              ; promotions-preview-session ; promotions-preview-base     ; STATEFUL
+
+INSERT_UPDATE DroolsRuleEngineContext; name[unique = true]        ; kieSession(name)           ; ruleFiringLimit
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""promotionengineservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""DroolsRuleEngineContext [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+                                     ; promotions-preview-context ; promotions-preview-session ; 200 ;
+
+UPDATE DroolsKIEBase; name[unique = true]     ; defaultKIESession(name)
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""promotionengineservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""DroolsKIEBase [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+                    ; promotions-preview-base ; promotions-preview-session
+
+UPDATE DroolsKIEModule; name[unique = true]       ; defaultKIEBase(name)
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""promotionengineservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""DroolsKIEModule [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+"#% afterEach: de.hybris.platform.core.Registry.getApplicationContext().getBean(""ruleEngineSystemSetup"").initializeModule(impex.getLastImportedItem());"
+                      ; promotions-preview-module ; promotions-preview-base
+
+INSERT_UPDATE RuleEngineJob; code[unique = true]                                                           ; springId                               ;
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""promotionengineservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""RuleEngineJob [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+                           ; rules -> Compilation and Publishing for [promotions-preview-module]           ; ruleEngineCompilePublishJobPerformable ;
+                           ; rules -> Undeploy for [promotions-preview-module]                             ; ruleEngineUndeployJobPerformable       ;
+                           ; rules -> Modules Sync from [promotions-preview-module] to [promotions-module] ; ruleEngineModuleSyncJobPerformable     ;
+                           ; rules -> Module Init for [promotions-preview-module]                          ; ruleEngineModuleInitJobPerformable     ;
+
+
+INSERT_UPDATE Unit; code[unique = true]; unitType      ; conversion; name[lang = en]
+                  ; bottle             ; wine_quantity ; 1         ; "Bottle"
+                  ; case-12            ; wine_quantity ; 12        ; "Case (12 Bottles)"
+                  ; pallet-672         ; wine_quantity ; 672       ; "Pallet (56 Cases)"

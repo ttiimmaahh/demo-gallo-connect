@@ -26,6 +26,7 @@ import { ProductFutureStockFeatureModule } from './features/product/product-futu
 import { ProductVariantsFeatureModule } from './features/product/product-variants-feature.module';
 import { ProductImageZoomFeatureModule } from './features/product/product-image-zoom-feature.module';
 import { ProductBulkPricingFeatureModule } from './features/product/product-bulk-pricing-feature.module';
+import { HeroBannerModule } from '../components/hero-banner/hero-banner.module';
 
 @NgModule({
   declarations: [],
@@ -36,6 +37,7 @@ import { ProductBulkPricingFeatureModule } from './features/product/product-bulk
     HamburgerMenuModule,
     SiteContextSelectorModule,
     LinkModule,
+    HeroBannerModule,
     BannerModule,
     CmsParagraphModule,
     TabParagraphContainerModule,

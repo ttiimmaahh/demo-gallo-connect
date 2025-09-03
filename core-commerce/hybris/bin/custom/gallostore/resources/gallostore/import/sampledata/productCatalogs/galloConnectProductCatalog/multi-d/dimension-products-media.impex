@@ -1,0 +1,35 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# vim:encoding=utf-8
+$productCatalog=galloConnectProductCatalog
+$productVersion=Staged
+$catalogVersion=catalogVersion(catalog(id[default=$productCatalog]),version[default=$productVersion])[unique=true,default=$productCatalog:$productVersion]
+$picture=picture(code, $catalogVersion)
+$thumbnail=thumbnail(code, $catalogVersion)
+$thumbnails=thumbnails(code, $catalogVersion)
+$normal=normal(code, $catalogVersion)
+$others=others(code, $catalogVersion)
+$medias=medias(code, $catalogVersion)
+$galleryImages=galleryImages(qualifier, $catalogVersion)
+$siteResource=jar:com.gallo.store.constants.GallostoreConstants&/gallostore/import/sampledata/productCatalogs/$productCatalog/images
+
+#Create Media
+INSERT_UPDATE Media;mediaFormat(qualifier);code[unique=true];@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];realfilename;mime[default='image/jpeg'];$catalogVersion;folder(qualifier)[default=images]
+
+#end
+
+
+#Create Media Container
+INSERT_UPDATE MediaContainer;qualifier[unique=true];$medias;$catalogVersion
+
+#end
+
+
+UPDATE Media;code[unique=true];mediaContainer(qualifier,$catalogVersion);$catalogVersion
+
+#end
+
+#Link product to Media 
+UPDATE Product;code[unique=true];$picture;$thumbnail;$others;$normal;$thumbnails;$galleryImages;$catalogVersion
+

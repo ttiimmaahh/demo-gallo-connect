@@ -1,0 +1,29 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# ImpEx for Importing Categories into Gallo Connect Store
+
+
+# Macros / Replacement Parameter definitions
+$productCatalog = galloConnectProductCatalog
+$productCatalogName = Gallo Connect Product Catalog
+$catalogVersion = catalogversion(catalog(id[default = $productCatalog]), version[default = 'Staged'])[unique = true, default = $productCatalog:Staged]
+
+$lang = en
+
+UPDATE Category; code[unique = true]; $catalogVersion; name[lang = $lang]   ; description[lang = $lang]
+               ; 1                  ;                ; Open Catalogue       ; ;
+               ; wines              ;                ; Wines                ; ;
+               ; red-wines          ;                ; "Red Wines"          ; ;
+               ; white-wines        ;                ; "White Wines"        ; ;
+               ; rose-wines         ;                ; "Rosé Wines"         ; ;
+               ; sparkling-wines    ;                ; "Sparkling Wines"    ; ;
+               ; cabernet-sauvignon ;                ; "Cabernet Sauvignon" ; ;
+               ; chardonnay         ;                ; "Chardonnay"         ; ;
+               ; zinfandel          ;                ; "Zinfandel"          ; ;
+               ; pinot-noir         ;                ; "Pinot Noir"         ; ;
+               ; red-blend          ;                ; "Red Blend"          ; ;
+               ; pinot-grigio       ;                ; "Pinot Grigio"       ; ;
+               ; sauvignon-blanc    ;                ; "Sauvignon Blanc"    ; ;
+               ; moscato            ;                ; "Moscato"            ; ;
+               ; prosecco           ;                ; "Prosecco"           ; ;

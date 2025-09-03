@@ -1,0 +1,85 @@
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+                                   ;;OrderPartiallyRefundedEmailBody;"
+#macro( genHtmlBoldFont $text )
+<font color='#414a4f' size='2' face='Arial, Helvetica, sans-serif'><b>$text</b></font>
+#end
+#macro(genHtmlLinkStartTag $url)
+<a href='$url'><font color='#666666'>
+#end
+#macro(genHtmlLinkEndTag)
+</font></a>
+#end
+#macro(genHtmlLink $url $bodyContent)
+<a href='$url'><font color='#666666'>$bodyContent</font></a>
+#end
+<p><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>${ctx.messages.getMessage('salutation', ${ctx.title},${ctx.displayName})},</font></p>
+<p><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>${ctx.messages.getMessage('thankYouForOrder', ${ctx.storeName})}</font></p>
+<p><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>${ctx.messages.getMessage('updateInformation', &#34;&#35;genHtmlLinkStartTag($orderInfoUrl)&#34;, &#34;&#35;genHtmlBoldFont(${ctx.orderCode})&#34;, &#34;&#35;genHtmlLinkEndTag()&#34;)}</font></p>
+<p><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>${ctx.messages.getMessage('refundAmount', ${ctx.refundAmount.formattedValue})}</font></p>
+<!--products start-->
+<table width='100%' border='1' align='center' cellpadding='0' cellspacing='0' bordercolor='#bfc1c0' class='products'>
+    <tr>
+        <td>
+            <table width='100%' cellpadding='0' cellspacing='0'>
+                <tr>
+                    <td width='50%'>&nbsp;</td>
+                    <td width='17%' height='40px'><font color='#333' size='2' face='Arial, Helvetica, sans-serif'><b>${ctx.messages.quantity}</b></font></td>
+                    <td width='17%' height='40px'><font color='#333' size='2' face='Arial, Helvetica, sans-serif'><b>${ctx.messages.itemPrice}</b></font></td>
+                    <td width='16%' height='40px'><font color='#333' size='2' face='Arial, Helvetica, sans-serif'><b>${ctx.messages.total}</b></font></td>
+                </tr>
+                #foreach( $orderEntry in ${ctx.refundedEntries} )
+                <tr>
+                    <td>
+                        <table width='100%' border='0' cellpadding='0' cellspacing='0'>
+                            <tr>
+                                <td valign='top' width='110px' style='width:110px;padding-left:10px;padding-right:10px'>
+                                    <a href='${ctx.baseUrl}$orderEntry.product.url'>
+                                        #foreach($image in $orderEntry.product.images) #if($image.imageType == 'PRIMARY' && $image.format == 'thumbnail' )
+                                        <img src='${ctx.mediaBaseUrl}$image.url' alt='' title='$orderEntry.product.name' />
+                                        #end #end
+                                    </a>
+                                    &nbsp;
+                                </td>
+                                <td valign='top'>
+                                    <p style='margin:3px 0'><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>
+                                        <a href='${ctx.baseUrl}$orderEntry.product.url'><font color='#666666'><b>$orderEntry.product.name</b></font></a>
+                                    </p>
+                                    #if (!$orderEntry.product.baseOptions.isEmpty())
+                                    #foreach ($option in $orderEntry.product.baseOptions)
+                                    #if ($option.selected && ($option.selected.url == $orderEntry.product.url))
+                                    <table width='100%' cellpadding='0' cellspacing='0'>
+                                        #foreach ($selectedOption in $option.selected.variantOptionQualifiers)
+                                        <tr>
+                                            <td width='30%'><p style='margin:3px 0'><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>$selectedOption.name:</font></p></td>
+                                            <td width='70%'><p style='margin:3px 0'><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>$selectedOption.value</font></p></td>
+                                        </tr>
+                                        #end
+                                    </table>
+                                    #end
+                                    #end
+                                    #end
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td valign='top'><p style='margin:3px 0'><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>$orderEntry.quantity</font></p></td>
+                    <td valign='top'><p style='margin:3px 0'><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>$orderEntry.basePrice.formattedValue</font></p></td>
+                    <td valign='top'><p style='margin:3px 0'><font color='#414a4f' size='3' face='Arial, Helvetica, sans-serif'><b>#if($orderEntry.totalPrice.value > 0) $orderEntry.totalPrice.formattedValue #else ${ctx.messages.free} #end</b></font></p></td>
+                </tr>
+                #end
+            </table>
+        </td>
+    </tr>
+</table>
+<!--products end-->
+<br/>
+#set ($mailToUrl = 'mailto:${ctx.messages.contactUsEmailAddress}')
+#if(${ctx.baseSite.Uid} == 'electronics')
+#set ( $paragraphContactUs = ${ctx.messages.getMessage('paragraphContactUs_electronics', &#34;&#35;genHtmlLinkStartTag(${ctx.messages.contactUsPage})&#34;, &#34;&#35;genHtmlLinkEndTag()&#34;, &#34;&#35;genHtmlLink($mailToUrl ${ctx.messages.contactUsEmailAddress})&#34;)} )
+#else
+#set ($faqPage = '${ctx.baseUrl}/faq')
+#set ( $paragraphContactUs = ${ctx.messages.getMessage('paragraphContactUs', &#34;&#35;genHtmlLinkStartTag($faqPage)&#34;, &#34;&#35;genHtmlLinkEndTag()&#34;, &#34;&#35;genHtmlLinkStartTag(${ctx.messages.contactUsPage})&#34;, &#34;&#35;genHtmlLinkEndTag()&#34;, &#34;&#35;genHtmlLink($mailToUrl ${ctx.messages.contactUsEmailAddress})&#34;)} )
+#end
+<p><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>$paragraphContactUs</font></p>
+<p><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>${ctx.messages.complimentaryClosing}</font></p>
+<p><font color='#666666' size='2' face='Arial, Helvetica, sans-serif'>${ctx.messages.signature}</font></p>"

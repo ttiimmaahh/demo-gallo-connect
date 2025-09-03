@@ -1,0 +1,9 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2021 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+
+INSERT_UPDATE Employee;uid[unique=true];name;groups(uid)[mode=append];
+                      ;RegApproverA;Bruce Rivers;b2bregistrationapprovergroup;
+
+INSERT_UPDATE Address;owner(Employee.UID)[unique=true]; email;contactAddress
+                     ;RegApproverA;B2BRegistrationApproverA@sap.com;true

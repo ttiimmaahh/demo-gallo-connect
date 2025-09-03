@@ -1,0 +1,61 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# ImpEx for Promotions for Gallo Connect Store
+
+# Language
+$lang=en
+
+#3% off orders over $500
+UPDATE OrderThresholdDiscountPercentagePromotion;enabled[default=true][unique=true];code[unique=true];messageCouldHaveFired[lang=$lang];
+;;3PercentDiscountOver500;3% off orders over $500;;
+
+#Discount on the cart using a coupon (promotion voucher)
+UPDATE PromotionVoucher;voucherCode[unique=true];description[lang=$lang];
+;SUMMER69;Get $10 discount on the cart;
+;WINTER16;Get 10% discount on the cart;
+
+# COUPON SAMPLE DATA
+INSERT_UPDATE SingleCodeCoupon;couponId(id)[unique=true];name[lang=en]
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""couponservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""SingleCodeCoupon [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+;SUMMER69;Coupon code for Summer Campaign
+;FALL16;Coupon code for Fall Campaign
+;CHRISTMAS16;Coupon code for Christmas Campaign
+;WINTER16;Coupon code for Winter Campaign
+
+INSERT_UPDATE MultiCodeCoupon;couponId(id)[unique=true];name[lang=en]
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""couponservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""MultiCodeCoupon [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+;PROMO16;Coupon codes for email campaign
+

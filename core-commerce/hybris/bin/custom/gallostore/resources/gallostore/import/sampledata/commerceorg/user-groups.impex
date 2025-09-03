@@ -1,0 +1,222 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+#
+# Import Two Sample B2B Organizations
+#
+
+INSERT_UPDATE UserGroup;uid[unique=true];groups(uid);locname[lang=en];
+;SuperAccountMangers;;
+
+INSERT_UPDATE Employee;uid[unique=true];name;groups(uid)[mode=append];
+;acctmgra;Alistair Thompson;employeegroup,acctmgrgroup,SuperAccountMangers,admingroup;
+;acctmgrb;Elke Vogel;employeegroup,acctmgrgroup,admingroup;
+;acctmgrc;Sergio Vega;employeegroup,acctmgrgroup,admingroup;
+;acctmgrd;Bruce Rivers;employeegroup,acctmgrgroup,admingroup;
+
+###############################
+#  Pronto Hardware ORGANIZATION (KIS)
+
+INSERT_UPDATE B2BCreditLimit;code[unique=true];alertRateType(code,itemtype(code));alertThreshold;amount;currency(isocode);dateRange(code,itemtype(code));datePeriod[dateformat=dd.MM.yyyy hh:mm:ss];
+;Monthly30KAlert3K;CURRENCY:B2BRateType;3000;30000;USD;MONTH:B2BPeriodRange;;
+
+INSERT_UPDATE B2BUnit;description;uid[unique=true];name;locName[lang=en];groups(uid);reportingOrganization(uid);Addresses(&addId);&B2BUnitID;accountManager(uid);accountManagerGroups(uid);creditLimit(code);approvalProcessCode;
+;KIS;Pronto;Pronto;Pronto;;Pronto;ProntoAddrID1;ProntoID1;acctmgrd;SuperAccountMangers;Monthly30KAlert3K;accApproval;
+;Unit A;Pronto Goods;Pronto Goods;Pronto Goods;Pronto;Pronto;ProntoAddrID2;ProntoID2;;;;
+
+INSERT_UPDATE Address;streetname[unique=true];postalcode[unique=true];town;country(isocode);billingAddress;contactAddress;shippingAddress;unloadingAddress;firstname;lastname;email;title(code);&addId;owner(&B2BUnitID)[unique=true];
+;3000 Lombard Street;94123;San Francisco;US;TRUE;TRUE;TRUE;TRUE;Akiro;Nakamura;akiro.nakamura@pronto-wines.com;mr;ProntoAddrID1;ProntoID1;
+;700 E 50th Street;10022;New York;US;TRUE;TRUE;TRUE;TRUE;Gi;Sun;gi.sun@pronto-wines.com;mr;ProntoAddrID2;ProntoID2;
+
+INSERT_UPDATE B2BUserGroup;uid[unique=true];name;unit(uid);permissions(code,unit(uid));
+;enhancedPermissions;Enhanced Permissions;Pronto;Pronto_12K_USD_ORDER:Pronto,Pronto_15K_USD_MONTH:Pronto;
+;commonPermissions;Common Permissions;Pronto;Pronto_6K_USD_ORDER:Pronto,Pronto_12K_USD_MONTH:Pronto;
+
+INSERT_UPDATE B2BCustomer;description;uid[unique=true];customerID;email;name;title(code);groups(uid);permissionGroups(uid);sessionCurrency(isocode)[default='USD'];
+;Admin A;linda.wolf@pronto-wines.com;ceff469f-25aa-4a10-99e3-da31245204e7;linda.wolf@pronto-wines.com;Linda Wolf;ms;Pronto, b2badmingroup;
+;Approver A;hanna.schmidt@pronto-wines.com;db1f981a-97ca-49c4-9cb3-9f4dfb0a3e0a;hanna.schmidt@pronto-wines.com;Hanna Schmidt;ms;Pronto, b2bapprovergroup;
+;Customer A;mark.rivers@pronto-wines.com;48d0ed8e-0a9c-46e9-8a04-b2327837dd1c;mark.rivers@pronto-wines.com;Mark Rivers;mr;Pronto Goods, b2bcustomergroup,enhancedPermissions;;
+;Customer B;mingmei.wang@pronto-wines.com;3e34392f-0338-4a3f-a787-37eb2c3724d6;mingmei.wang@pronto-wines.com;Mingmei Wang;ms;Pronto Goods, b2bcustomergroup, commonPermissions;;
+;Manager A;akiro.nakamura@pronto-wines.com;9c7fc26d-3da6-4e22-b9d7-5be929088d83;akiro.nakamura@pronto-wines.com;Akiro Nakamura;mr;Pronto, b2bmanagergroup;
+;Manager B;anil.gupta@pronto-wines.com;b62919c5-9c62-49d6-b6fe-6630e3e96a16;anil.gupta@pronto-wines.com;Anil Gupta;mr;Pronto Goods, b2bmanagergroup;
+
+INSERT_UPDATE B2BBudget;code[unique=true];Unit(uid);budget;currency(isocode)[allownull=true];dateRange[dateformat=dd.MM.yyyy hh:mm:ss,allownull=true];name[lang=en];
+;30K_USD_MONTH;Pronto;30000;USD;01.01.2010 00:00:00,12.31.2021 12:59:59;30K USD/MONTH;
+;20K_USD_MONTH;Pronto;20000;USD;01.01.2010 00:00:00,12.31.2021 12:59:59;20K USD/MONTH;
+
+INSERT_UPDATE B2BCostCenter;code[unique=true];Unit(uid);currency(isocode);budgets(code);name[lang=en];
+;Pronto_Goods;Pronto Goods;USD;30K_USD_MONTH;Pronto Goods;
+
+INSERT_UPDATE B2BOrderThresholdPermission;code[unique=true];Unit(uid);threshold;currency(isocode);
+;Pronto_5K_USD_ORDER;Pronto;5000;USD; -
+;Pronto_6K_USD_ORDER;Pronto;6000;USD; -
+;Pronto_10K_USD_ORDER;Pronto;10000;USD; -
+;Pronto_12K_USD_ORDER;Pronto;12000;USD; -
+
+INSERT_UPDATE B2BOrderThresholdTimespanPermission;code[unique=true];Unit(uid);threshold;currency(isocode);range(code,itemtype(code));
+;Pronto_15K_USD_MONTH;Pronto;15000;USD;MONTH:B2BPeriodRange;
+;Pronto_12K_USD_MONTH;Pronto;12000;USD;MONTH:B2BPeriodRange;
+;Pronto_Unlimited_Threshold_Timespan;Pronto;999999999;USD;MONTH:B2BPeriodRange;
+
+UPDATE B2BUnit;uid[unique=true];creditLimit(code);accountManager(uid);approvers(uid)
+;Pronto;Monthly30KAlert3K;acctmgrd;hanna.schmidt@pronto-wines.com;
+
+UPDATE B2BCustomer;uid[unique=true];permissions(code,unit(uid));
+;hanna.schmidt@pronto-wines.com;Pronto_Unlimited_Threshold_Timespan:Pronto,Pronto_10K_USD_ORDER:Pronto;
+;james.bell@pronto-wines.com;Pronto_5K_USD_ORDER:Pronto;
+
+INSERT_UPDATE SiteEmployeeGroup;uid[unique=true];visibleSite(uid);groups(uid)
+;galloConnect-standalone-group;galloConnect-standalone;multisitegroup;
+
+INSERT_UPDATE Employee;uid[unique=true];groups(uid)[mode=append];loginDisabled[default=true]
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+    if(!extensionNames.contains(""customersupportbackoffice"") ||  !extensionNames.contains(""assistedserviceservices""))
+    {
+        LOG.info(""Sample data for assistedserviceservices was skipped because the extensions are not included in the setup"");
+        line.clear();
+    }
+"
+;csa-galloConnect-standalone;customersupportadministratorgroup,galloConnect-standalone-group;
+
+INSERT_UPDATE Employee; uid[unique = true]                   ; groups(uid)                                                                 ; loginDisabled[default = true]
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+    if(!extensionNames.contains(""customersupportbackoffice"") ||  !extensionNames.contains(""assistedserviceservices""))
+    {
+        LOG.info(""Sample data for assistedserviceservices was skipped because the extensions are not included in the setup"");
+        line.clear();
+    }
+"
+                      ; asagent-galloConnect-standalone        ; asagentsalesmanagergroup, customermanagergroup, galloConnect-standalone-group ;
+                      ; asagentsales-galloConnect-standalone   ; asagentsalesgroup, galloConnect-standalone-group                              ;
+                      ; asagentmanager-galloConnect-standalone ; asagentsalesmanagergroup, galloConnect-standalone-group                       ;
+
+INSERT_UPDATE Employee; UID[unique = true] ; groups(uid)[mode = append]                                                  ; loginDisabled[default = true]
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+    if(!extensionNames.contains(""customersupportbackoffice"") ||  !extensionNames.contains(""assistedserviceservices""))
+    {
+        LOG.info(""Sample data for assistedserviceservices was skipped because the extensions are not included in the setup"");
+        line.clear();
+    }
+"
+                      ; asagent-all        ; asagentsalesmanagergroup, customermanagergroup, galloConnect-standalone-group ;
+                      ; asagentsales-all   ; asagentsalesgroup, galloConnect-standalone-group                              ;
+                      ; asagentmanager-all ; asagentsalesmanagergroup, galloConnect-standalone-group                       ;
+
+INSERT_UPDATE CustomerList; uid[unique = true]; implementationType; priority; members(uid)[mode = append]                ;
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+    if(!extensionNames.contains(""customersupportbackoffice"") ||  !extensionNames.contains(""assistedserviceservices""))
+    {
+        LOG.info(""Sample data for assistedserviceservices was skipped because the extensions are not included in the setup"");
+        line.clear();
+    }
+"
+                          ; instoreCustomers  ; "IN_STORE"        ; 3       ; asagent-all, asagent-galloConnect-standalone ;
+                          ; bopisCustomers    ; "BOPIS"           ; 2       ; asagent-all, asagent-galloConnect-standalone ;
+
+INSERT_UPDATE Employee; UID[unique = true]                                 ; groups(uid)                                                    ; loginDisabled[default = true]
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+    if(!extensionNames.contains(""customersupportbackoffice"") ||  !extensionNames.contains(""assistedserviceservices""))
+    {
+        LOG.info(""Sample data for assistedserviceservices was skipped because the extensions are not included in the setup"");
+        line.clear();
+    }
+"
+                      ; CustomerSupportAdministrator-galloConnect-standalone ; customersupportadministratorgroup, galloConnect-standalone-group ;
+                      ; CustomerSupportManager-galloConnect-standalone       ; customersupportmanagergroup, galloConnect-standalone-group       ;
+                      ; CustomerSupportAgent-galloConnect-standalone         ; customersupportagentgroup, galloConnect-standalone-group         ;
+
+INSERT_UPDATE Employee; UID[unique = true]               ; groups(uid)[mode = append]                                     ; loginDisabled[default = true]
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+    if(!extensionNames.contains(""customersupportbackoffice"") ||  !extensionNames.contains(""assistedserviceservices""))
+    {
+        LOG.info(""Sample data for assistedserviceservices was skipped because the extensions are not included in the setup"");
+        line.clear();
+    }
+"
+                      ; CustomerSupportAdministrator-all ; customersupportadministratorgroup, galloConnect-standalone-group ;
+                      ; CustomerSupportManager-all       ; customersupportmanagergroup, galloConnect-standalone-group       ;
+                      ; CustomerSupportAgent-all         ; customersupportagentgroup, galloConnect-standalone-group         ;
+
+INSERT_UPDATE PrincipalGroupRelation; source(uid)[unique = true]                       ; target(uid)[unique = true]
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+    if(!extensionNames.contains(""customersupportbackoffice"") ||  !extensionNames.contains(""assistedserviceservices""))
+    {
+        LOG.info(""Sample data for assistedserviceservices was skipped because the extensions are not included in the setup"");
+        line.clear();
+    }
+"
+                                    ; asagent-galloConnect-standalone                    ; nakanostoreemployees
+                                    ; asagent-galloConnect-standalone                    ; ichikawastoreemployees
+
+### Sample promotions of Promotion-Engine ###
+INSERT_UPDATE UserGroup;uid[unique=true];groups(uid);locname[lang=en];
+"#%beforeEach:
+import de.hybris.platform.core.Registry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import de.hybris.platform.util.Config;
+
+Logger LOG = LoggerFactory.getLogger(""ImpExImportReader"");
+extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
+extensionName = ""couponservices"";
+if(!extensionNames.contains(extensionName))
+{
+	templateId = line.get(1);
+	LOG.info(""UserGroup [{}] was skipped because the extension [{}] is not included in the setup"", templateId, extensionName);
+	line.clear();
+}
+"
+;bronzeloyalty;;Bronze Loyalty;
+;silverloyalty;;Silver Loyalty;
+;goldloyalty;;Gold Loyalty;
+### END Sample promotions of Promotion-Engine ###

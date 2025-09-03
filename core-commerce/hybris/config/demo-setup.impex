@@ -1,0 +1,9 @@
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+
+INSERT_UPDATE OAuthClientDetails;clientId[unique=true] ;resourceIds ;scope  ;authorizedGrantTypes  ;authorities ;clientSecret ;registeredRedirectUri
+                                ;client-side              ;hybris            ;basic        ;implicit,client_credentials                                  ;ROLE_CLIENT             ;secret          ;https://localhost:9002/authorizationserver/oauth2_implicit_callback;
+                                ;mobile_android           ;hybris            ;basic        ;authorization_code,refresh_token,password,client_credentials    ;ROLE_CLIENT             ;secret          ;https://localhost:9002/authorizationserver/oauth2_callback;
+
+
+INSERT_UPDATE OAuthClientDetails;clientId[unique=true];resourceIds;scope[mode=append];authorizedGrantTypes;accessTokenValiditySeconds;authorities;registeredredirecturi
+                                ;smartedit;hybris;basic,permissionswebservices,personalizationwebservices;authorization_code,saml_token,password;3600;ROLE_ADMINGROUP,ROLE_BASECMSMANAGERGROUP,ROLE_PREVIEWMANAGERGROUP;"http://localhost:9002/smartedit"

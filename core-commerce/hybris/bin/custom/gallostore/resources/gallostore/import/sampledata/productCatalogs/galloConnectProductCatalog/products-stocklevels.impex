@@ -1,0 +1,25 @@
+# -----------------------------------------------------------------------
+# Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+# -----------------------------------------------------------------------
+# ImpEx for Importing Products stock levels into Gallo Connect Store
+
+# Macros / Replacement Parameter definitions
+$productCatalog=galloConnectProductCatalog
+$productCatalogName=Gallo Connect Product Catalog
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,default=$productCatalog:Staged]
+$vendor=gallo
+
+INSERT_UPDATE Warehouse;code[unique=true];name[lang=en]
+;pw_warehouse_s;Gallo Connect Warehouse South
+;pw_warehouse_e;Gallo Connect Warehouse East
+;pw_warehouse_w;Gallo Connect Warehouse West
+;pw_warehouse_n;Gallo Connect Warehouse North
+
+INSERT_UPDATE StockLevel;productCode[unique=true];warehouse(code)[unique=true,default=default];available;inStockStatus(code);maxPreOrder[default=1];maxStockLevelHistoryCount[default=-1];overSelling[default=0];preOrder[default=0];reserved[default=0]
+
+
+
+
+
+INSERT_UPDATE Product;code[unique=true];stockLevels(productCode,warehouse(code));vendors(code)[default=$vendor];$catalogVersion
+
